@@ -66,7 +66,8 @@ class Operation(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     account = models.ForeignKey(
         Account, on_delete=models.RESTRICT, related_name='operations')
-    transaction = models.ForeignKey(Transaction, on_delete=models.RESTRICT)
+    transaction = models.ForeignKey(
+        Transaction, on_delete=models.RESTRICT, related_name='operations')
 
     def __str__(self):
         return "{} {} ({})".format(self.transaction.date.strftime(DATE_FORMAT), self.transaction.description, self.account.name)

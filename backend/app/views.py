@@ -1,6 +1,7 @@
 from rest_framework import views, status
 from .models import AccountType, Account, Setting, Operation, Transaction, Category, Counterparty
-from .serializers import AccountTypeSerializer, AccountSerializer, SettingSerializer, CapitalSerializer, OperationSerializer, CategorySerializer
+from .serializers import (AccountTypeSerializer, AccountSerializer, SettingSerializer, CapitalSerializer,
+                          CategorySerializer, TransactionSerializer, AccountOperationSerializer)
 from rest_framework.response import Response
 from .helpers import convert_currency
 from django.db.models import F
@@ -121,18 +122,18 @@ class CapitalAPIView(views.APIView):
 
 
 class OperationListAPIView(views.APIView):
-    @swagger_auto_schema(responses={200: OperationSerializer(many=True)})
+    @swagger_auto_schema(responses={200: AccountOperationSerializer(many=True)})
     def get(self, request, *args, **kwargs):
         operations = Operation.objects.filter(account=kwargs['pk']).annotate(
             date=F('transaction__date'), description=F('transaction__description')).distinct()
 
-        serializer = OperationSerializer(operations, many=True)
+        serializer = AccountOperationSerializer(operations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=OperationSerializer, responses={201: OperationSerializer()})
+    @swagger_auto_schema(request_body=AccountOperationSerializer, responses={201: AccountOperationSerializer()})
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        serializer = OperationSerializer(data=request.data)
+        serializer = AccountOperationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             validated_data = serializer.validated_data
             counterparty_id = validated_data.get('counterpartyId')
@@ -162,3 +163,48 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 class CategoryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class TransactionListCreateView(generics.ListCreateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        transactions_data = request.data
+        operations_data = transactions_data.pop('operations', [])
+
+        serializer = self.get_serializer(data=transactions_data)
+        serializer.is_valid(raise_exception=True)
+        transaction = serializer.save()
+
+        for operation_data in operations_data:
+            account_id = operation_data.pop('account')
+            account = Account.objects.get(pk=account_id)
+            Operation.objects.create(
+                transaction=transaction, account=account, **operation_data)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        transactions_data = request.data
+        operations_data = transactions_data.pop('operations', [])
+
+        serializer = self.get_serializer(data=transactions_data)
+        serializer.is_valid(raise_exception=True)
+        transaction = serializer.save()
+
+        for operation_data in operations_data:
+            account_id = operation_data.pop('account')
+            account = Account.objects.get(pk=account_id)
+            Operation.objects.create(
+                transaction=transaction, account=account, **operation_data)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_2, headers=headers)
+
+
+class TransactionRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer

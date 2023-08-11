@@ -1,4 +1,4 @@
-from .models import AccountType, Account, Setting, Category
+from .models import AccountType, Account, Setting, Category, Operation, Transaction
 from rest_framework import serializers
 
 
@@ -27,7 +27,7 @@ class CapitalSerializer(serializers.Serializer):
     capital = serializers.FloatField()
 
 
-class OperationSerializer(serializers.Serializer):
+class AccountOperationSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     amount = serializers.FloatField()
     date = serializers.DateTimeField()
@@ -39,4 +39,18 @@ class OperationSerializer(serializers.Serializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class OperationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Operation
+        fields = ('account', 'amount')
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    operations = OperationSerializer(many=True, required=False)
+
+    class Meta:
+        model = Transaction
         fields = '__all__'
