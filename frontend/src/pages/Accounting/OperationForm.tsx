@@ -1,5 +1,6 @@
 import { CreateOperationRequestParams } from '@/api/operations';
 import CategorySelectField from '@/components/CategorySelectField';
+import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormik } from 'formik';
 import { FC } from 'react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
@@ -20,8 +21,6 @@ interface OperationFormProps {
   initialValues: OperationFormValues;
   onSubmit: (values: OperationFormValues) => void;
 }
-
-const REQUIRED_FIELD_ERROR_MESSAGE = 'Обязательное поле';
 
 const OperationSchema = Yup.object().shape({
   amount: Yup.number()
@@ -49,8 +48,6 @@ const OperationForm: FC<OperationFormProps> = ({
       validationSchema: OperationSchema,
       onSubmit,
     });
-
-  console.log({ values });
 
   return (
     <Form id={id} onSubmit={handleSubmit}>

@@ -3,6 +3,7 @@ import { Grid, Header, MenuItemProps, Segment } from 'semantic-ui-react';
 import AccountsMenu from './AccountsMenu';
 import ModalAddOperation from './ModalAddOperation';
 import OperationsTable from './OperationsTable';
+import ModalTransfer from './ModalTransfer';
 
 const Accounting: FC = () => {
   const [activeAccountId, setActiveAccountId] = useState(0);
@@ -29,6 +30,7 @@ const Accounting: FC = () => {
           {activeAccountId ? (
             <div>
               <ModalAddOperation accountId={activeAccountId} />
+              <ModalTransfer sourceAccountId={activeAccountId} />
               <OperationsTable accountId={activeAccountId} />
             </div>
           ) : (
