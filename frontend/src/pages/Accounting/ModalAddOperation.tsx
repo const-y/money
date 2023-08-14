@@ -35,7 +35,7 @@ const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
     },
   });
 
-  const formId = 'form';
+  const formId = self.crypto.randomUUID();
 
   const handleSubmit = ({
     date,
