@@ -1,7 +1,7 @@
 from rest_framework import views, status
-from .models import AccountType, Account, Setting, Operation, Transaction, Category, Counterparty
+from .models import AccountType, Account, Setting, Operation, Transaction, Category, Counterparty, CurrencyRate
 from .serializers import (AccountTypeSerializer, AccountSerializer, SettingSerializer, CapitalSerializer,
-                          CategorySerializer, TransactionSerializer, AccountOperationSerializer)
+                          CategorySerializer, TransactionSerializer, AccountOperationSerializer, CurrencyRateSerializer)
 from rest_framework.response import Response
 from .helpers import convert_currency
 from django.db.models import F
@@ -208,3 +208,14 @@ class TransactionListCreateView(generics.ListCreateAPIView):
 class TransactionRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+
+
+class ExchangeRateListCreateView(generics.ListCreateAPIView):
+    queryset = CurrencyRate.objects.all().order_by('-date')
+    serializer_class = CurrencyRateSerializer
+    pagination_class = None
+
+
+class ExchangeRateRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CurrencyRate.objects.all()
+    serializer_class = CurrencyRateSerializer
