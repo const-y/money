@@ -11,7 +11,9 @@ from .views import (
     CategoryListCreateView,
     CategoryRetrieveUpdateDeleteView,
     TransactionListCreateView,
-    TransactionRetrieveUpdateView
+    TransactionRetrieveUpdateView,
+    ExchangeRateListCreateView,
+    ExchangeRateRetrieveUpdateDeleteView
 )
 
 urlpatterns = [
@@ -26,4 +28,7 @@ urlpatterns = [
     path('categories/<int:pk>/', CategoryRetrieveUpdateDeleteView.as_view()),
     path('transactions/', TransactionListCreateView.as_view()),
     path('transactions/<int:pk>/', TransactionRetrieveUpdateView.as_view()),
+    path('exchange-rates/', ExchangeRateListCreateView.as_view()),
+    path('exchange-rates/<int:pk>/',
+         ExchangeRateRetrieveUpdateDeleteView.as_view()),
 ]

@@ -1,4 +1,4 @@
-from .models import AccountType, Account, Setting, Category, Operation, Transaction
+from .models import AccountType, Account, Setting, Category, Operation, Transaction, CurrencyRate
 from rest_framework import serializers
 
 
@@ -53,4 +53,10 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
+        fields = '__all__'
+
+
+class CurrencyRateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CurrencyRate
         fields = '__all__'

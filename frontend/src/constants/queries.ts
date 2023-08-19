@@ -5,6 +5,7 @@ const queries = {
   CAPITAL: 'capital',
   OPERATIONS: 'operations',
   CATEGORIES: 'categories',
+  EXCHANGE_RATES: 'exchange-rates',
 };
 
 export default queries;
