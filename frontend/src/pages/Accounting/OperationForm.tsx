@@ -42,12 +42,15 @@ const OperationForm: FC<OperationFormProps> = ({
   onSubmit,
   id,
 }) => {
-  const { handleChange, values, errors, handleSubmit, setFieldValue } =
+  const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<OperationFormValues>({
       initialValues,
       validationSchema: OperationSchema,
       onSubmit,
     });
+
+  const getError = (fieldName: keyof OperationFormValues) =>
+    touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
     <Form id={id} onSubmit={handleSubmit}>
@@ -58,14 +61,14 @@ const OperationForm: FC<OperationFormProps> = ({
         format="YYYY-MM-DD"
         label="Выберите дату"
         required
-        error={errors.date}
+        error={getError('date')}
       />
       <Form.Input
         name="amount"
         label="Сумма"
         placeholder="Сумма"
         value={values.amount}
-        error={errors.amount}
+        error={getError('amount')}
         onChange={handleChange}
         required
       />
@@ -74,14 +77,14 @@ const OperationForm: FC<OperationFormProps> = ({
         label="Описание"
         placeholder="Описание"
         value={values.description}
-        error={errors.description}
+        error={getError('description')}
         onChange={handleChange}
         required
       />
       <CategorySelectField
         value={values.categoryId}
         onChange={(categoryId) => setFieldValue('categoryId', categoryId)}
-        error={errors.categoryId}
+        error={getError('categoryId')}
       />
     </Form>
   );

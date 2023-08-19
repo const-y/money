@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 import AccountTypeForm, { AccountTypeFormValues } from './AccountTypeForm';
 
+const INITIAL_VALUES = { title: '' };
+
 const ModalAddForm: FC = () => {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -22,7 +24,7 @@ const ModalAddForm: FC = () => {
     },
   });
 
-  const formId = 'form';
+  const formId = self.crypto.randomUUID();
 
   const handleSubmit = (values: AccountTypeFormValues) => {
     mutate(values);
@@ -44,7 +46,7 @@ const ModalAddForm: FC = () => {
       <Modal.Content>
         <AccountTypeForm
           id={formId}
-          initialValues={{ title: '' }}
+          initialValues={INITIAL_VALUES}
           onSubmit={handleSubmit}
         />
       </Modal.Content>

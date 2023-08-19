@@ -20,12 +20,15 @@ interface AccountFormProps {
 
 const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
   const { data, isLoading } = useQuery(queries.ACCOUNT_TYPES, getAccountTypes);
-  const { handleChange, values, errors, handleSubmit, setFieldValue } =
+  const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<AccountFormValues>({
       initialValues,
       onSubmit,
       validate: (values) => (values.name ? {} : { name: 'Обязательное поле' }),
     });
+
+  const getError = (fieldName: keyof AccountFormValues) =>
+    touched[fieldName] ? errors[fieldName] : undefined;
 
   const accountTypeOptions = useMemo(
     () =>
@@ -51,7 +54,7 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
         label="Название"
         placeholder="Название"
         value={values.name}
-        error={errors.name}
+        error={getError('name')}
         onChange={handleChange}
       />
       <Form.Input
@@ -59,14 +62,14 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
         label="Валюта"
         placeholder="Валюта"
         value={values.currency}
-        error={errors.currency}
+        error={getError('currency')}
         onChange={handleChange}
       />
       <Form.Select
         label="Тип счета"
         placeholder="Тип счета"
         value={values.accountTypeId}
-        error={errors.accountTypeId}
+        error={getError('accountTypeId')}
         onChange={handleSelectAccountType}
         options={accountTypeOptions}
         loading={isLoading}
