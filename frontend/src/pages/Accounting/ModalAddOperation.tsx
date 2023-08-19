@@ -1,4 +1,7 @@
-import { createOperation } from '@/api/operations';
+import {
+  CreateOperationRequestParams,
+  createOperation,
+} from '@/api/operations';
 import getOperationsQueryKey from '@/helpers/getOperationsQueryKey';
 import { FC, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -6,6 +9,7 @@ import { toast } from 'react-toastify';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 import OperationForm, { OperationFormValues } from './OperationForm';
 import assertIsDate from '@/helpers/assertIsDate';
+import assertIsNumber from '@/helpers/assertIsNumber';
 
 interface ModalAddOperationProps {
   accountId: number;
@@ -37,17 +41,8 @@ const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
 
   const formId = self.crypto.randomUUID();
 
-  const handleSubmit = ({
-    date,
-    categoryId,
-    ...values
-  }: OperationFormValues) => {
-    assertIsDate(date);
-    if (categoryId === null) {
-      throw Error('categoryId не должно быть null');
-    }
-
-    mutate({ accountId, date: date.toISOString(), categoryId, ...values });
+  const handleSubmit = (formValues: OperationFormValues) => {
+    mutate(getAddOperationData({ accountId, formValues }));
   };
 
   const handleOpen = () => setOpen(true);
@@ -84,5 +79,27 @@ const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
     </Modal>
   );
 };
+
+function getAddOperationData({
+  accountId,
+  formValues,
+}: {
+  accountId: number;
+  formValues: OperationFormValues;
+}): CreateOperationRequestParams {
+  const { amount, description, date, categoryId, counterpartyId } = formValues;
+
+  assertIsDate(date);
+  assertIsNumber(categoryId);
+
+  return {
+    account: accountId,
+    amount,
+    date: date.toISOString(),
+    description,
+    category: categoryId,
+    counterparty: counterpartyId,
+  };
+}
 
 export default ModalAddOperation;

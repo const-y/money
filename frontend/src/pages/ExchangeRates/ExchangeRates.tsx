@@ -39,9 +39,9 @@ const ExchangeRates: FC = () => {
     { key: 'date', title: 'Дата', renderCell: (row) => formatDate(row.date) },
     { key: 'currency', title: 'Валюта', renderCell: (row) => row.currency },
     {
-      key: 'base_currency',
+      key: 'baseCurrency',
       title: 'Базовая валюта',
-      renderCell: (row) => row.base_currency,
+      renderCell: (row) => row.baseCurrency,
     },
     { key: 'rate', title: 'Курс', renderCell: (row) => row.rate },
   ];
@@ -56,13 +56,11 @@ const ExchangeRates: FC = () => {
 };
 
 function getInitialValues(exchangeRate: ExchangeRate): ExchangeRateFormValues {
-  const { date, currency, base_currency, rate } = exchangeRate;
+  const { date, ...rest } = exchangeRate;
 
   return {
     date: new Date(date),
-    currency,
-    baseCurrency: base_currency,
-    rate,
+    ...rest,
   };
 }
 

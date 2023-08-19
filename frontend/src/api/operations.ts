@@ -1,7 +1,7 @@
 import api from './api';
 
 export interface Operation {
-  categoryId: number;
+  category: number;
   date: string;
   description: string;
   id: number;
@@ -9,29 +9,27 @@ export interface Operation {
 }
 
 export interface GetOperationListRequestParams {
-  accountId: number;
+  account: number;
 }
 
 export interface CreateOperationRequestParams {
-  accountId: number;
+  account: number;
   amount: number;
   date: string;
   description: string;
-  categoryId: number;
-  counterpartyId: number;
+  category: number;
+  counterparty: number;
 }
 
-export const getOperationList = ({
-  accountId,
-}: GetOperationListRequestParams) =>
+export const getOperationList = ({ account }: GetOperationListRequestParams) =>
   api
-    .get<Operation[]>(`/accounts/${accountId}/operations/`)
+    .get<Operation[]>(`/accounts/${account}/operations/`)
     .then((result) => result.data);
 
 export const createOperation = ({
-  accountId,
+  account,
   ...params
 }: CreateOperationRequestParams) =>
   api
-    .post<Operation>(`/accounts/${accountId}/operations/`, params)
+    .post<Operation>(`/accounts/${account}/operations/`, params)
     .then((result) => result.data);

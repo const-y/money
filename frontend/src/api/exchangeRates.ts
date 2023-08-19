@@ -4,7 +4,7 @@ export type Currency = 'RUB' | 'USD' | 'GEL';
 
 export interface ExchangeRate extends Entity {
   currency: Currency;
-  base_currency: Currency;
+  baseCurrency: Currency;
   date: string;
   rate: number;
 }

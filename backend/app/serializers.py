@@ -9,12 +9,9 @@ class AccountTypeSerializer(serializers.ModelSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    accountTypeId = serializers.PrimaryKeyRelatedField(
-        source='account_type', queryset=AccountType.objects.all())
-
     class Meta:
         model = Account
-        fields = ['id', 'name', 'currency', 'accountTypeId', 'balance']
+        fields = ['id', 'name', 'currency', 'account_type', 'balance']
 
 
 class SettingSerializer(serializers.ModelSerializer):
@@ -32,8 +29,8 @@ class AccountOperationSerializer(serializers.Serializer):
     amount = serializers.FloatField()
     date = serializers.DateTimeField()
     description = serializers.CharField()
-    categoryId = serializers.IntegerField(required=False)
-    counterpartyId = serializers.IntegerField(required=False)
+    category = serializers.IntegerField(required=False)
+    counterparty = serializers.IntegerField(required=False)
 
 
 class CategorySerializer(serializers.ModelSerializer):

@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { Loader } from 'semantic-ui-react';
 
 interface AccountTypeCellProps {
-  accountTypeId: string;
+  accountTypeId: number;
 }
 
 const AccountTypeCell: FC<AccountTypeCellProps> = ({ accountTypeId }) => {
