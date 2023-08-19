@@ -35,9 +35,7 @@ const Accounts: FC = () => {
     {
       key: 'accountType',
       title: 'Тип счета',
-      renderCell: (row) => (
-        <AccountTypeCell accountTypeId={row.accountTypeId} />
-      ),
+      renderCell: (row) => <AccountTypeCell accountTypeId={row.accountType} />,
     },
     {
       key: 'balance',

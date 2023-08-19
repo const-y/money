@@ -2,3 +2,4 @@ django==4.2
 djangorestframework
 django-cors-headers
 drf-yasg
+djangorestframework-camel-case

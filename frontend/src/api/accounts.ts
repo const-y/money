@@ -1,7 +1,7 @@
 import api, { Entity } from './api';
 
 export interface Account extends Entity {
-  accountTypeId: string;
+  accountType: number;
   currency: string;
   name: string;
   balance: number;

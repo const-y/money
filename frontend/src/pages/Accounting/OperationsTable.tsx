@@ -12,7 +12,7 @@ interface OperationsTableProps {
 
 const OperationsTable: FC<OperationsTableProps> = ({ accountId }) => {
   const { data, isLoading } = useQuery(getOperationsQueryKey(accountId), () =>
-    getOperationList({ accountId })
+    getOperationList({ account: accountId })
   );
 
   if (isLoading || !data) {
