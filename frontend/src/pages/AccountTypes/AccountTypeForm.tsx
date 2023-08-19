@@ -17,13 +17,16 @@ const AccountTypeForm: FC<AccountTypeFormProps> = ({
   onSubmit,
   id,
 }) => {
-  const { handleChange, values, errors, handleSubmit } =
+  const { handleChange, values, errors, touched, handleSubmit } =
     useFormik<AccountTypeFormValues>({
       initialValues,
       onSubmit,
       validate: (values) =>
         values.title ? {} : { title: 'Обязательное поле' },
     });
+
+  const getError = (fieldName: keyof AccountTypeFormValues) =>
+    touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
     <Form id={id} onSubmit={handleSubmit}>
@@ -32,7 +35,7 @@ const AccountTypeForm: FC<AccountTypeFormProps> = ({
         label="Название"
         placeholder="Название"
         value={values.title}
-        error={errors.title}
+        error={getError('title')}
         onChange={handleChange}
       />
     </Form>

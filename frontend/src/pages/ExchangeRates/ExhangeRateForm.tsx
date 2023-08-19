@@ -31,12 +31,15 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
   onSubmit,
   id,
 }) => {
-  const { handleChange, values, errors, handleSubmit, setFieldValue } =
+  const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<ExchangeRateFormValues>({
       initialValues,
       validationSchema: TransferSchema,
       onSubmit,
     });
+
+  const getError = (fieldName: keyof ExchangeRateFormValues) =>
+    touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
     <Form id={id} onSubmit={handleSubmit}>
@@ -47,14 +50,14 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
         format="YYYY-MM-DD"
         label="Выберите дату"
         required
-        error={errors.date}
+        error={getError('date')}
       />
       <Form.Input
         name="currency"
         label="Валюта"
         placeholder="Валюта"
         value={values.currency}
-        error={errors.currency}
+        error={getError('currency')}
         onChange={handleChange}
         required
       />
@@ -63,7 +66,7 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
         label="Базовая валюта"
         placeholder="Базовая валюта"
         value={values.baseCurrency}
-        error={errors.baseCurrency}
+        error={getError('baseCurrency')}
         onChange={handleChange}
         required
       />
@@ -72,7 +75,7 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
         label="Курс"
         placeholder="Курс валюты относительно базовой"
         value={values.rate}
-        error={errors.rate}
+        error={getError('rate')}
         onChange={handleChange}
         required
       />
