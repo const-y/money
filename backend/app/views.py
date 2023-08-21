@@ -136,8 +136,8 @@ class OperationListAPIView(views.APIView):
         serializer = AccountOperationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             validated_data = serializer.validated_data
-            counterparty_id = validated_data.get('counterpartyId')
-            category_id = validated_data['categoryId']
+            counterparty_id = validated_data.get('counterparty')
+            category_id = validated_data['category']
             category = Category.objects.get(pk=category_id)
             account = Account.objects.get(pk=kwargs['pk'])
             if (counterparty_id):
