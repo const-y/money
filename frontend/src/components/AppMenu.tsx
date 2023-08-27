@@ -32,6 +32,9 @@ const AppMenu: FC = () => (
           <Dropdown.Item as={Link} to={routes.EXCHANGE_RATES}>
             Курсы валют
           </Dropdown.Item>
+          <Dropdown.Item as={Link} to={routes.CATEGORIES}>
+            Категории
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Container>

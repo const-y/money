@@ -5,6 +5,7 @@ const routes = {
   ACCOUNT_TYPES: 'account-types',
   ACCOUNTS: 'accounts',
   EXCHANGE_RATES: 'exchange-rates',
+  CATEGORIES: 'categories',
 };
 
 export default routes;
