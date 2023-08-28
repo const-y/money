@@ -15,6 +15,7 @@ import routes from './constants/routes';
 import Accounts from './pages/Accounts';
 import ExchangeRates from './pages/ExchangeRates';
 import Categories from './pages/Categories';
+import IncomeExpenses from './pages/IncomeExpenses';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: routes.ACCOUNTS, element: <Accounts /> },
       { path: routes.EXCHANGE_RATES, element: <ExchangeRates /> },
       { path: routes.CATEGORIES, element: <Categories /> },
+      { path: routes.INCOME_EXPENSES, element: <IncomeExpenses /> },
     ],
   },
 ]);

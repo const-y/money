@@ -21,6 +21,13 @@ const AppMenu: FC = () => (
       <Menu.Item as={Link} to={routes.PLANNING}>
         Планирование
       </Menu.Item>
+      <Dropdown item simple text="Анализ">
+        <Dropdown.Menu>
+          <Dropdown.Item as={Link} to={routes.INCOME_EXPENSES}>
+            Доходы и расходы
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
       <Dropdown item simple text="Справочники">
         <Dropdown.Menu>
           <Dropdown.Item as={Link} to={routes.ACCOUNT_TYPES}>

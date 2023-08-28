@@ -6,6 +6,7 @@ const queries = {
   OPERATIONS: 'operations',
   CATEGORIES: 'categories',
   EXCHANGE_RATES: 'exchange-rates',
+  INCOME_EXPENSES_REPORT: 'income-expenses-report',
 };
 
 export default queries;
