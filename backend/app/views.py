@@ -1,13 +1,16 @@
 from rest_framework import views, status
 from .models import AccountType, Account, Setting, Operation, Transaction, Category, Counterparty, CurrencyRate
 from .serializers import (AccountTypeSerializer, AccountSerializer, SettingSerializer, CapitalSerializer,
-                          CategorySerializer, TransactionSerializer, AccountOperationSerializer, CurrencyRateSerializer)
+                          CategorySerializer, TransactionSerializer, AccountOperationSerializer, CurrencyRateSerializer, IncomeExpensesReportSerializer)
 from rest_framework.response import Response
 from .helpers import convert_currency
 from django.db.models import F
 from drf_yasg.utils import swagger_auto_schema
 from django.db import transaction
 from rest_framework import generics
+from datetime import datetime
+from drf_yasg import openapi
+from django.db.models import Sum
 
 
 class AccountTypeListAPIView(views.APIView):
@@ -219,3 +222,42 @@ class ExchangeRateListCreateView(generics.ListCreateAPIView):
 class ExchangeRateRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CurrencyRate.objects.all()
     serializer_class = CurrencyRateSerializer
+
+
+class IncomeExpensesReportView(views.APIView):
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('from', openapi.IN_QUERY,
+                          description="Начальная дата (%Y-%m-%dT%H:%M:%SZ)", type=openapi.TYPE_STRING),
+        openapi.Parameter('to', openapi.IN_QUERY,
+                          description="Конечная дата (%Y-%m-%dT%H:%M:%SZ)", type=openapi.TYPE_STRING),
+    ], responses={200: IncomeExpensesReportSerializer()})
+    def get(self, request, *args, **kwargs):
+        from_date_str = request.query_params.get('from')
+        to_date_str = request.query_params.get('to')
+        try:
+            start_date = datetime.strptime(
+                from_date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+            end_date = datetime.strptime(to_date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+        except (ValueError, TypeError):
+            return Response({'error': 'Некорректный формат даты'}, status=status.HTTP_400_BAD_REQUEST)
+
+        original_income = Operation.objects.filter(transaction__date__range=(
+            start_date, end_date), transaction__category__is_expense=False)
+
+        original_expenses = Operation.objects.filter(transaction__date__range=(
+            start_date, end_date), transaction__category__is_expense=True)
+
+        income = 0
+        expenses = 0
+
+        for item in original_income:
+            income += convert_currency(item.amount, item.account.currency)
+
+        for item in original_expenses:
+            expenses += convert_currency(item.amount, item.account.currency)
+
+        serializer = IncomeExpensesReportSerializer({
+            'income': income,
+            'expenses': abs(expenses)
+        })
+        return Response(serializer.data, status=status.HTTP_200_OK)

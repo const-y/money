@@ -57,3 +57,8 @@ class CurrencyRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CurrencyRate
         fields = '__all__'
+
+
+class IncomeExpensesReportSerializer(serializers.Serializer):
+    income = serializers.FloatField()
+    expenses = serializers.FloatField()

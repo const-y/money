@@ -6,6 +6,7 @@ const routes = {
   ACCOUNTS: 'accounts',
   EXCHANGE_RATES: 'exchange-rates',
   CATEGORIES: 'categories',
+  INCOME_EXPENSES: 'income-expenses',
 };
 
 export default routes;
