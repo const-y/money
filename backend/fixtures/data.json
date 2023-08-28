@@ -1,0 +1,9 @@
+[
+  {
+    "model": "app.setting",
+    "pk": "base_currency",
+    "fields": {
+      "value": "RUB"
+    }
+  }
+]
