@@ -2,7 +2,6 @@ import {
   CreateOperationRequestParams,
   createOperation,
 } from '@/api/operations';
-import getOperationsQueryKey from '@/helpers/getOperationsQueryKey';
 import { FC, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -10,6 +9,7 @@ import { Button, Icon, Modal } from 'semantic-ui-react';
 import OperationForm, { OperationFormValues } from './OperationForm';
 import assertIsDate from '@/helpers/assertIsDate';
 import assertIsNumber from '@/helpers/assertIsNumber';
+import queries from '@/constants/queries';
 
 interface ModalAddOperationProps {
   accountId: number;
@@ -35,7 +35,8 @@ const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
       toast.error('Не удалось добавить операцию');
     },
     onSettled: () => {
-      queryClient.invalidateQueries(getOperationsQueryKey(accountId));
+      queryClient.invalidateQueries([queries.OPERATIONS, accountId]);
+      queryClient.invalidateQueries([queries.ACCOUNTS]);
     },
   });
 

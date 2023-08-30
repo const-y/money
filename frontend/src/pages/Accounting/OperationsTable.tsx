@@ -1,17 +1,17 @@
 import { getOperationList } from '@/api/operations';
 import formatDate from '@/helpers/formatDate';
-import getOperationsQueryKey from '@/helpers/getOperationsQueryKey';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { Loader, Table } from 'semantic-ui-react';
 import AccountCurrencyAmount from './AccountCurrencyAmount';
+import queries from '@/constants/queries';
 
 interface OperationsTableProps {
   accountId: number;
 }
 
 const OperationsTable: FC<OperationsTableProps> = ({ accountId }) => {
-  const { data, isLoading } = useQuery(getOperationsQueryKey(accountId), () =>
+  const { data, isLoading } = useQuery([queries.OPERATIONS, accountId], () =>
     getOperationList({ account: accountId })
   );
 
