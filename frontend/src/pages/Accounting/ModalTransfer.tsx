@@ -24,7 +24,11 @@ const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
       toast.error('Не удалось выполнить перевод');
     },
     onSettled: () => {
-      queryClient.invalidateQueries([queries.OPERATIONS, sourceAccountId]);
+      queryClient.invalidateQueries([
+        queries.ACCOUNTS,
+        sourceAccountId,
+        queries.OPERATIONS,
+      ]);
     },
   });
 

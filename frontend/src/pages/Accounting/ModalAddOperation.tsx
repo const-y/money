@@ -35,7 +35,6 @@ const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
       toast.error('Не удалось добавить операцию');
     },
     onSettled: () => {
-      queryClient.invalidateQueries([queries.OPERATIONS, accountId]);
       queryClient.invalidateQueries([queries.ACCOUNTS]);
     },
   });

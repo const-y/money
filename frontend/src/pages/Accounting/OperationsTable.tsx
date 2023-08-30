@@ -11,8 +11,9 @@ interface OperationsTableProps {
 }
 
 const OperationsTable: FC<OperationsTableProps> = ({ accountId }) => {
-  const { data, isLoading } = useQuery([queries.OPERATIONS, accountId], () =>
-    getOperationList({ account: accountId })
+  const { data, isLoading } = useQuery(
+    [queries.ACCOUNTS, accountId, queries.OPERATIONS],
+    () => getOperationList({ account: accountId })
   );
 
   if (isLoading || !data) {
