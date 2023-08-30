@@ -1,12 +1,12 @@
 import { Transaction, createTransaction } from '@/api/transactions';
 import assertIsDate from '@/helpers/assertIsDate';
 import assertIsNumber from '@/helpers/assertIsNumber';
-import getOperationsQueryKey from '@/helpers/getOperationsQueryKey';
 import { FC, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 import TransferForm, { TransferFormValues } from './ TransferForm';
+import queries from '@/constants/queries';
 
 interface ModalTransferProps {
   sourceAccountId: number;
@@ -24,7 +24,7 @@ const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
       toast.error('Не удалось выполнить перевод');
     },
     onSettled: () => {
-      queryClient.invalidateQueries(getOperationsQueryKey(sourceAccountId));
+      queryClient.invalidateQueries([queries.OPERATIONS, sourceAccountId]);
     },
   });
 
