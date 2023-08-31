@@ -22,3 +22,6 @@ frontend:
 
 bootstrap:
 	$(ACTIVATE_VENV) && cd backend && pip install -r requirements.txt
+
+test: 
+	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .

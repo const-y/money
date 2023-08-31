@@ -128,7 +128,7 @@ class OperationListAPIView(views.APIView):
     @swagger_auto_schema(responses={200: AccountOperationSerializer(many=True)})
     def get(self, request, *args, **kwargs):
         operations = Operation.objects.filter(account=kwargs['pk']).annotate(
-            date=F('transaction__date'), description=F('transaction__description')).distinct()
+            date=F('transaction__date'), description=F('transaction__description')).order_by('-date').distinct()
 
         serializer = AccountOperationSerializer(operations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
