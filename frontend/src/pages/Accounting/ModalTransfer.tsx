@@ -12,6 +12,8 @@ interface ModalTransferProps {
   sourceAccountId: number;
 }
 
+const TRANSFER_MODAL_TITLE = 'Перевод между счетами';
+
 const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -49,11 +51,11 @@ const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
       trigger={
         <Button basic>
           <Icon name="exchange" />
-          Перевод между счетами
+          {TRANSFER_MODAL_TITLE}
         </Button>
       }
     >
-      <Modal.Header>Перевод между счетами</Modal.Header>
+      <Modal.Header>{TRANSFER_MODAL_TITLE}</Modal.Header>
       <Modal.Content>
         <TransferForm
           id={formId}

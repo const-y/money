@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { FC } from 'react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
+import { SemanticDatepickerProps } from 'react-semantic-ui-datepickers/dist/types';
 import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
@@ -39,62 +40,77 @@ const TransferForm: FC<TransferFormProps> = ({
   onSubmit,
   id,
 }) => {
-  const { handleChange, values, errors, handleSubmit, setFieldValue } =
+  const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<TransferFormValues>({
       initialValues,
       validationSchema: TransferSchema,
       onSubmit,
     });
 
+  const handleDateChange = (
+    _event: React.SyntheticEvent<Element, Event> | undefined,
+    data: SemanticDatepickerProps
+  ) => {
+    setFieldValue('date', data.value);
+  };
+
+  const createAccountSelectChangeHandler =
+    (fieldName: keyof TransferFormValues) => (value: number) => {
+      setFieldValue(fieldName, value);
+    };
+
+  const getError = (fieldName: keyof TransferFormValues) =>
+    touched[fieldName] ? errors[fieldName] : undefined;
+
   return (
     <Form id={id} onSubmit={handleSubmit}>
       <SemanticDatepicker
         name="date"
         value={values.date}
-        onChange={(_event, data) => setFieldValue('date', data.value)}
+        onChange={handleDateChange}
         format="YYYY-MM-DD"
         label="Выберите дату"
         required
-        error={errors.date}
+        error={getError('date')}
       />
       <Form.Input
         name="description"
         label="Описание"
         placeholder="Описание"
         value={values.description}
-        error={errors.description}
+        error={getError('description')}
         onChange={handleChange}
         required
       />
       <AccountSelectField
         value={values.sourceAccountId}
-        onChange={(value) => setFieldValue('sourceAccountId', value)}
-        name="sourceAccountId"
+        onChange={createAccountSelectChangeHandler('sourceAccountId')}
         label="Источник"
         placeholder="Выберите счет с которого взять деньги"
+        error={getError('sourceAccountId')}
       />
       <Form.Input
         name="sourceAmount"
         label="Сума снятия"
         placeholder="Сумма снятия в валюте источника"
         value={values.sourceAmount}
-        error={errors.sourceAmount}
+        error={getError('sourceAmount')}
         onChange={handleChange}
         required
       />
       <AccountSelectField
         value={values.targetAccountId}
-        onChange={(value) => setFieldValue('targetAccountId', value)}
-        name="targetAccountId"
+        onChange={createAccountSelectChangeHandler('targetAccountId')}
         label="Назначение"
         placeholder="Выберите счет куда положить деньги"
+        error={getError('targetAccountId')}
       />
       <Form.Input
         name="targetAmount"
         label="Сумма зачисления"
         placeholder="Сумма зачисления в валюте источника"
         value={values.targetAmount}
-        error={errors.targetAmount}
+        error={getError('targetAmount')}
         onChange={handleChange}
         required
       />

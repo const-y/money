@@ -8,7 +8,6 @@ interface AccountSelectFieldProps {
   value: number | null;
   error?: string;
   onChange: (value: number) => void;
-  name: string;
   label: string;
   placeholder: string;
 }
@@ -16,7 +15,6 @@ interface AccountSelectFieldProps {
 const AccountSelectField: FC<AccountSelectFieldProps> = ({
   value,
   error,
-  name,
   label,
   placeholder,
   onChange,
@@ -50,6 +48,7 @@ const AccountSelectField: FC<AccountSelectFieldProps> = ({
       onChange={handleChange}
       required
       loading={isLoading}
+      search
     />
   );
 };
