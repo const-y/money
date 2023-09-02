@@ -7,12 +7,13 @@ import { Account, updateAccount } from '@/api/accounts';
 import queries from '@/constants/queries';
 
 import AccountForm, { AccountFormValues } from './AccountForm';
+import assertIsNumber from '@/helpers/assertIsNumber';
 
 interface ModalEditProps {
-  initialValues: Account;
+  account: Account;
 }
 
-const ModalEdit: FC<ModalEditProps> = ({ initialValues }) => {
+const ModalEdit: FC<ModalEditProps> = ({ account }) => {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(updateAccount, {
@@ -28,10 +29,10 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues }) => {
     },
   });
 
-  const formId = 'form';
+  const formId = self.crypto.randomUUID();
 
   const handleSubmit = (values: AccountFormValues) => {
-    mutate({ ...initialValues, ...values });
+    mutate(updateAccountData(account, values));
   };
 
   return (
@@ -45,7 +46,7 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues }) => {
       <Modal.Content>
         <AccountForm
           id={formId}
-          initialValues={initialValues}
+          initialValues={account}
           onSubmit={handleSubmit}
         />
       </Modal.Content>
@@ -60,5 +61,19 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues }) => {
     </Modal>
   );
 };
+
+function updateAccountData(
+  account: Account,
+  formValues: AccountFormValues
+): Account {
+  const { accountType } = formValues;
+  assertIsNumber(accountType);
+
+  return {
+    ...account,
+    ...formValues,
+    accountType,
+  };
+}
 
 export default ModalEdit;

@@ -9,7 +9,7 @@ import queries from '@/constants/queries';
 export interface AccountFormValues {
   name: string;
   currency: string;
-  accountTypeId: string;
+  accountType: string | number;
 }
 
 interface AccountFormProps {
@@ -40,11 +40,11 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
     [data]
   );
 
-  const handleSelectAccountType = (
+  const handleSelectAccountTypeChange = (
     _event: SyntheticEvent<HTMLElement, Event>,
     data: DropdownProps
   ) => {
-    setFieldValue('accountTypeId', data.value);
+    setFieldValue('accountType', data.value);
   };
 
   return (
@@ -68,11 +68,12 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
       <Form.Select
         label="Тип счета"
         placeholder="Тип счета"
-        value={values.accountTypeId}
-        error={getError('accountTypeId')}
-        onChange={handleSelectAccountType}
+        value={values.accountType}
+        error={getError('accountType')}
+        onChange={handleSelectAccountTypeChange}
         options={accountTypeOptions}
         loading={isLoading}
+        search
       />
     </Form>
   );
