@@ -4,7 +4,14 @@ import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 import AccountForm, { AccountFormValues } from './AccountForm';
-import { createAccount } from '@/api/accounts';
+import { CreateAccountData, createAccount } from '@/api/accounts';
+import assertIsNumber from '@/helpers/assertIsNumber';
+
+const INITIAL_VALUES: AccountFormValues = {
+  name: '',
+  currency: 'USD',
+  accountType: '',
+} as const;
 
 const ModalAddForm: FC = () => {
   const [open, setOpen] = useState(false);
@@ -23,10 +30,10 @@ const ModalAddForm: FC = () => {
     },
   });
 
-  const formId = 'form';
+  const formId = self.crypto.randomUUID();
 
   const handleSubmit = (values: AccountFormValues) => {
-    mutate(values);
+    mutate(getCreateAccountData(values));
   };
 
   const handleOpen = () => setOpen(true);
@@ -48,7 +55,7 @@ const ModalAddForm: FC = () => {
       <Modal.Content>
         <AccountForm
           id={formId}
-          initialValues={{ name: '', currency: 'USD', accountTypeId: '' }}
+          initialValues={INITIAL_VALUES}
           onSubmit={handleSubmit}
         />
       </Modal.Content>
@@ -63,5 +70,16 @@ const ModalAddForm: FC = () => {
     </Modal>
   );
 };
+
+function getCreateAccountData(
+  formValues: AccountFormValues
+): CreateAccountData {
+  assertIsNumber(formValues.accountType);
+
+  return {
+    ...formValues,
+    accountType: formValues.accountType,
+  };
+}
 
 export default ModalAddForm;

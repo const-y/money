@@ -26,7 +26,7 @@ const Accounts: FC = () => {
       renderCell: (row) => (
         <div>
           <ModalDeleteAccount id={row.id} name={row.name} />
-          <ModalEdit initialValues={row} />
+          <ModalEdit account={row} />
         </div>
       ),
       collapsing: true,

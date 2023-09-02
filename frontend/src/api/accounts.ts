@@ -9,6 +9,8 @@ export interface Account extends Entity {
 
 export interface CreateAccountData {
   name: string;
+  currency: string;
+  accountType: number;
 }
 
 export const getAccounts = () =>
