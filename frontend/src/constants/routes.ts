@@ -7,6 +7,7 @@ const routes = {
   EXCHANGE_RATES: 'exchange-rates',
   CATEGORIES: 'categories',
   INCOME_EXPENSES: 'income-expenses',
+  EXPENSES_BY_CURRENCIES_REPORT: 'expenses-by-currencies-report',
 };
 
 export default routes;

@@ -16,6 +16,7 @@ import Accounts from './pages/Accounts';
 import ExchangeRates from './pages/ExchangeRates';
 import Categories from './pages/Categories';
 import IncomeExpenses from './pages/IncomeExpenses';
+import ExpensesByCurrencies from './pages/ExpensesByCurrencies/ExpensesByCurrencies';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       { path: routes.EXCHANGE_RATES, element: <ExchangeRates /> },
       { path: routes.CATEGORIES, element: <Categories /> },
       { path: routes.INCOME_EXPENSES, element: <IncomeExpenses /> },
+      {
+        path: routes.EXPENSES_BY_CURRENCIES_REPORT,
+        element: <ExpensesByCurrencies />,
+      },
     ],
   },
 ]);
