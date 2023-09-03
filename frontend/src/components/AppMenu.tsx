@@ -26,6 +26,9 @@ const AppMenu: FC = () => (
           <Dropdown.Item as={Link} to={routes.INCOME_EXPENSES}>
             Доходы и расходы
           </Dropdown.Item>
+          <Dropdown.Item as={Link} to={routes.EXPENSES_BY_CURRENCIES_REPORT}>
+            Расходы по валютам
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Dropdown item simple text="Справочники">
