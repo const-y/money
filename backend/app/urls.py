@@ -14,7 +14,8 @@ from .views import (
     TransactionRetrieveUpdateView,
     ExchangeRateListCreateView,
     ExchangeRateRetrieveUpdateDeleteView,
-    IncomeExpensesReportView
+    IncomeExpensesReportView,
+    ExpensesByCurrenciesReportView
 )
 
 urlpatterns = [
@@ -32,5 +33,7 @@ urlpatterns = [
     path('exchange-rates/', ExchangeRateListCreateView.as_view()),
     path('exchange-rates/<int:pk>/',
          ExchangeRateRetrieveUpdateDeleteView.as_view()),
-    path('reports/income-expenses', IncomeExpensesReportView.as_view())
+    path('reports/income-expenses', IncomeExpensesReportView.as_view()),
+    path('reports/expenses-by-currencies',
+         ExpensesByCurrenciesReportView.as_view())
 ]

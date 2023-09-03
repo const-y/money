@@ -1,7 +1,8 @@
 from rest_framework import views, status
 from .models import AccountType, Account, Setting, Operation, Transaction, Category, Counterparty, CurrencyRate
 from .serializers import (AccountTypeSerializer, AccountSerializer, SettingSerializer, CapitalSerializer,
-                          CategorySerializer, TransactionSerializer, AccountOperationSerializer, CurrencyRateSerializer, IncomeExpensesReportSerializer)
+                          CategorySerializer, TransactionSerializer, AccountOperationSerializer, CurrencyRateSerializer,
+                          IncomeExpensesReportSerializer, ExpensesByCurrenciesReportSerializer)
 from rest_framework.response import Response
 from .helpers import convert_currency
 from django.db.models import F
@@ -10,7 +11,8 @@ from django.db import transaction
 from rest_framework import generics
 from datetime import datetime
 from drf_yasg import openapi
-from django.db.models import Sum
+
+from app.services import ReportService
 
 
 class AccountTypeListAPIView(views.APIView):
@@ -260,4 +262,20 @@ class IncomeExpensesReportView(views.APIView):
             'income': income,
             'expenses': abs(expenses)
         })
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ExpensesByCurrenciesReportView(views.APIView):
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('year', openapi.IN_QUERY,
+                          description="Год", type=openapi.TYPE_NUMBER),
+    ], responses={200: IncomeExpensesReportSerializer()})
+    def get(self, request, *args, **kwargs):
+        year = request.query_params.get('year')
+        service = ReportService()
+        data = service.get_expenses_grouped_by_currency(year=year)
+
+        serializer = ExpensesByCurrenciesReportSerializer(
+            data, many=True)
+
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -62,3 +62,9 @@ class CurrencyRateSerializer(serializers.ModelSerializer):
 class IncomeExpensesReportSerializer(serializers.Serializer):
     income = serializers.FloatField()
     expenses = serializers.FloatField()
+
+
+class ExpensesByCurrenciesReportSerializer(serializers.Serializer):
+    currency = serializers.CharField()
+    month = serializers.IntegerField()
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
