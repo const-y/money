@@ -56,7 +56,7 @@ class Transaction(models.Model):
     date = models.DateTimeField()
     counterparty = models.ForeignKey(
         Counterparty, on_delete=models.RESTRICT, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT, blank=True, null=True)
 
     def __str__(self):
         return "{} {}".format(self.date.strftime(DATE_FORMAT), self.description)

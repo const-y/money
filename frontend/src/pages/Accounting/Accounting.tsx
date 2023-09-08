@@ -4,6 +4,7 @@ import AccountsMenu from './AccountsMenu';
 import ModalAddOperation from './ModalAddOperation';
 import OperationsTable from './OperationsTable';
 import ModalTransfer from './ModalTransfer';
+import ModalChangeAmount from './ModalChangeAmount';
 
 const Accounting: FC = () => {
   const [activeAccountId, setActiveAccountId] = useState(0);
@@ -31,6 +32,7 @@ const Accounting: FC = () => {
             <div>
               <ModalAddOperation accountId={activeAccountId} />
               <ModalTransfer sourceAccountId={activeAccountId} />
+              <ModalChangeAmount accountId={activeAccountId} />
               <OperationsTable accountId={activeAccountId} />
             </div>
           ) : (

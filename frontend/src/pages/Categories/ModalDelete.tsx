@@ -1,9 +1,9 @@
 import { deleteCategory } from '@/api/categories';
+import CommonModalDelete from '@/components/CommonModalDelete';
 import queries from '@/constants/queries';
 import { FC, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
 
 interface ModalDeleteProps {
   id: number;
@@ -31,27 +31,13 @@ const ModalDelete: FC<ModalDeleteProps> = ({ id, title }) => {
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+    <CommonModalDelete
+      onDelete={handleDelete}
+      isLoading={isLoading}
+      name={title}
       open={open}
-      trigger={<Icon link name="trash" />}
-    >
-      <Modal.Header>Удаление записи</Modal.Header>
-      <Modal.Content>
-        <Modal.Description>
-          <p>Вы действительно хотите удалить запись "{title}"?</p>
-        </Modal.Description>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button onClick={() => setOpen(false)} basic>
-          Отмена
-        </Button>
-        <Button onClick={handleDelete} negative loading={isLoading}>
-          Удалить
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      setOpen={setOpen}
+    />
   );
 };
 

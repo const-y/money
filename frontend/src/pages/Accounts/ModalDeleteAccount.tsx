@@ -1,9 +1,9 @@
 import { deleteAccount } from '@/api/accounts';
+import CommonModalDelete from '@/components/CommonModalDelete';
 import queries from '@/constants/queries';
 import { FC, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
 
 interface ModalDeleteAccountProps {
   id: number;
@@ -31,27 +31,13 @@ const ModalDeleteAccount: FC<ModalDeleteAccountProps> = ({ id, name }) => {
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+    <CommonModalDelete
+      onDelete={handleDelete}
+      isLoading={isLoading}
+      name={name}
       open={open}
-      trigger={<Icon link name="trash" />}
-    >
-      <Modal.Header>Удаление записи</Modal.Header>
-      <Modal.Content>
-        <Modal.Description>
-          <p>Вы действительно хотите удалить запись "{name}"?</p>
-        </Modal.Description>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button onClick={() => setOpen(false)} basic>
-          Отмена
-        </Button>
-        <Button onClick={handleDelete} negative loading={isLoading}>
-          Удалить
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      setOpen={setOpen}
+    />
   );
 };
 
