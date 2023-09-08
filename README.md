@@ -1,4 +1,5 @@
 # Домашняя бухгалтерия
+[![Maintainability](https://api.codeclimate.com/v1/badges/3d649aed5880f3cef832/maintainability)](https://codeclimate.com/github/const-y/money/maintainability)
 
 ## Установка
 
