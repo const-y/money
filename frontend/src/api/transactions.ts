@@ -10,7 +10,7 @@ export interface Transaction {
   operations?: Operation[];
   description: string;
   date: string;
-  category: number;
+  category?: number;
   counterparty?: number;
 }
 
