@@ -1,5 +1,6 @@
 import AccountSelectField from '@/components/AccountSelectField';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
+import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
@@ -18,7 +19,6 @@ export interface TransferFormValues {
 }
 
 interface TransferFormProps {
-  id: string;
   initialValues: TransferFormValues;
   onSubmit: (values: TransferFormValues) => void;
 }
@@ -35,11 +35,8 @@ const TransferSchema = Yup.object().shape({
   targetAmount: validateAmount,
 });
 
-const TransferForm: FC<TransferFormProps> = ({
-  initialValues,
-  onSubmit,
-  id,
-}) => {
+const TransferForm: FC<TransferFormProps> = ({ initialValues, onSubmit }) => {
+  const formId = useFormId();
   const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<TransferFormValues>({
       initialValues,
@@ -63,7 +60,7 @@ const TransferForm: FC<TransferFormProps> = ({
     touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
-    <Form id={id} onSubmit={handleSubmit}>
+    <Form id={formId} onSubmit={handleSubmit}>
       <SemanticDatepicker
         name="date"
         value={values.date}

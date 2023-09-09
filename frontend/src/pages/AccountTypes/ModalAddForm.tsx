@@ -1,20 +1,24 @@
 import { createAccountType } from '@/api/accountTypes';
+import FormModal from '@/components/FormModal';
 import queries from '@/constants/queries';
-import { FC, useState } from 'react';
+import { useModalState } from '@/context/ModalState';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import AccountTypeForm, { AccountTypeFormValues } from './AccountTypeForm';
+import { MODAL_ADD_ACCOUNT_TYPE } from '@/constants/modalIds';
 
 const INITIAL_VALUES = { title: '' };
 
 const ModalAddForm: FC = () => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_ADD_ACCOUNT_TYPE);
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(createAccountType, {
     onSuccess: (data) => {
       toast.success(`Запись "${data.title}" успешно добавлена`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось добавить новый тип счета');
@@ -24,41 +28,25 @@ const ModalAddForm: FC = () => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: AccountTypeFormValues) => {
     mutate(values);
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
+    <FormModal
+      title="Добавление типа счета"
+      submitting={isLoading}
+      modalId={MODAL_ADD_ACCOUNT_TYPE}
       trigger={
         <Button basic>
           <Icon name="plus" />
           Добавить
         </Button>
       }
+      submitButtonLabel="Создать"
     >
-      <Modal.Header>Добавление типа счета</Modal.Header>
-      <Modal.Content>
-        <AccountTypeForm
-          id={formId}
-          initialValues={INITIAL_VALUES}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={() => setOpen(false)}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Создать
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <AccountTypeForm initialValues={INITIAL_VALUES} onSubmit={handleSubmit} />
+    </FormModal>
   );
 };
 

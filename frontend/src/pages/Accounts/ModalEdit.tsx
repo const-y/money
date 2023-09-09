@@ -1,25 +1,29 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import { Account, updateAccount } from '@/api/accounts';
 import queries from '@/constants/queries';
+import FormModal from '@/components/FormModal';
+import { useModalState } from '@/context/ModalState';
+import assertIsNumber from '@/helpers/assertIsNumber';
 
 import AccountForm, { AccountFormValues } from './AccountForm';
-import assertIsNumber from '@/helpers/assertIsNumber';
+import { MODAL_EDIT_ACCOUNT } from '@/constants/modalIds';
 
 interface ModalEditProps {
   account: Account;
 }
 
 const ModalEdit: FC<ModalEditProps> = ({ account }) => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_EDIT_ACCOUNT);
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(updateAccount, {
     onSuccess: (data) => {
       toast.success(`Счет "${data.name}" успешно обновлен`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось обновить счет');
@@ -29,36 +33,20 @@ const ModalEdit: FC<ModalEditProps> = ({ account }) => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: AccountFormValues) => {
     mutate(updateAccountData(account, values));
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
+    <FormModal
+      title="Редактирование счета"
+      submitting={isLoading}
+      modalId={MODAL_EDIT_ACCOUNT}
+      submitButtonLabel="Сохранить"
       trigger={<Icon link name="pencil alternate" />}
     >
-      <Modal.Header>Редактирование типа счета</Modal.Header>
-      <Modal.Content>
-        <AccountForm
-          id={formId}
-          initialValues={account}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={() => setOpen(false)}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Сохранить
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <AccountForm initialValues={account} onSubmit={handleSubmit} />
+    </FormModal>
   );
 };
 

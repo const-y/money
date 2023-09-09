@@ -5,6 +5,7 @@ import { DropdownProps, Form } from 'semantic-ui-react';
 
 import { getAccountTypes } from '@/api/accountTypes';
 import queries from '@/constants/queries';
+import { useFormId } from '@/context/FormId';
 
 export interface AccountFormValues {
   name: string;
@@ -13,12 +14,12 @@ export interface AccountFormValues {
 }
 
 interface AccountFormProps {
-  id: string;
   initialValues: AccountFormValues;
   onSubmit: (values: AccountFormValues) => void;
 }
 
-const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
+const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
+  const formId = useFormId();
   const { data, isLoading } = useQuery(queries.ACCOUNT_TYPES, getAccountTypes);
   const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<AccountFormValues>({
@@ -48,7 +49,7 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit, id }) => {
   };
 
   return (
-    <Form id={id} onSubmit={handleSubmit}>
+    <Form id={formId} onSubmit={handleSubmit}>
       <Form.Input
         name="name"
         label="Название"

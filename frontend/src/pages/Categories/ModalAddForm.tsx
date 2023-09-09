@@ -1,9 +1,12 @@
 import { createCategory } from '@/api/categories';
+import FormModal from '@/components/FormModal';
+import { MODAL_ADD_CATEGORY } from '@/constants/modalIds';
 import queries from '@/constants/queries';
-import { FC, useState } from 'react';
+import { useModalState } from '@/context/ModalState';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import ExchangeRateForm, { CategoryFormValues } from './CategoryForm';
 
 const INITIAL_VALUES: CategoryFormValues = {
@@ -12,12 +15,13 @@ const INITIAL_VALUES: CategoryFormValues = {
 };
 
 const ModalAddForm: FC = () => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_ADD_CATEGORY);
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(createCategory, {
     onSuccess: () => {
       toast.success(`Запись успешно добавлена`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось добавить категорию');
@@ -27,41 +31,28 @@ const ModalAddForm: FC = () => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: CategoryFormValues) => {
     mutate(values);
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
+    <FormModal
+      title="Добавление курса валюты"
+      submitting={isLoading}
+      modalId={MODAL_ADD_CATEGORY}
       trigger={
         <Button basic>
           <Icon name="plus" />
           Добавить
         </Button>
       }
+      submitButtonLabel="Создать"
     >
-      <Modal.Header>Добавление категории</Modal.Header>
-      <Modal.Content>
-        <ExchangeRateForm
-          id={formId}
-          initialValues={INITIAL_VALUES}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={() => setOpen(false)}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Создать
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <ExchangeRateForm
+        initialValues={INITIAL_VALUES}
+        onSubmit={handleSubmit}
+      />
+    </FormModal>
   );
 };
 

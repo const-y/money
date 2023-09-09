@@ -17,6 +17,7 @@ import ExchangeRates from './pages/ExchangeRates';
 import Categories from './pages/Categories';
 import IncomeExpenses from './pages/IncomeExpenses';
 import ExpensesByCurrencies from './pages/ExpensesByCurrencies/ExpensesByCurrencies';
+import { ModalStateProvider } from './context/ModalState';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,9 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ModalStateProvider>
+        <RouterProvider router={router} />
+      </ModalStateProvider>
     </QueryClientProvider>
     <ToastContainer />
   </React.StrictMode>

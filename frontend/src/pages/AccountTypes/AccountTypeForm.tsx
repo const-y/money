@@ -1,3 +1,4 @@
+import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
 import { Form } from 'semantic-ui-react';
@@ -7,7 +8,6 @@ export interface AccountTypeFormValues {
 }
 
 interface AccountTypeFormProps {
-  id: string;
   initialValues: AccountTypeFormValues;
   onSubmit: (values: AccountTypeFormValues) => void;
 }
@@ -15,8 +15,9 @@ interface AccountTypeFormProps {
 const AccountTypeForm: FC<AccountTypeFormProps> = ({
   initialValues,
   onSubmit,
-  id,
 }) => {
+  const formId = useFormId();
+
   const { handleChange, values, errors, touched, handleSubmit } =
     useFormik<AccountTypeFormValues>({
       initialValues,
@@ -29,7 +30,7 @@ const AccountTypeForm: FC<AccountTypeFormProps> = ({
     touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
-    <Form id={id} onSubmit={handleSubmit}>
+    <Form id={formId} onSubmit={handleSubmit}>
       <Form.Input
         name="title"
         label="Название"

@@ -1,10 +1,12 @@
-import { FC, useState } from 'react';
+import { Category, updateCategory } from '@/api/categories';
+import FormModal from '@/components/FormModal';
+import { MODAL_EDIT_CATEGORY } from '@/constants/modalIds';
+import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
-
-import { Category, updateCategory } from '@/api/categories';
-import queries from '@/constants/queries';
+import { Icon } from 'semantic-ui-react';
 import ExchangeRateForm, { CategoryFormValues } from './CategoryForm';
 
 interface ModalEditProps {
@@ -13,12 +15,13 @@ interface ModalEditProps {
 }
 
 const ModalEdit: FC<ModalEditProps> = ({ initialValues, categoryId }) => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_EDIT_CATEGORY);
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(updateCategory, {
     onSuccess: () => {
       toast.success('Запись успешно обновлена');
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось обновить категорию');
@@ -28,36 +31,20 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues, categoryId }) => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: CategoryFormValues) => {
     mutate(getUpdateCategoryData({ categoryId, formValues: values }));
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
+    <FormModal
+      title="Редактирование курса валют"
+      submitting={isLoading}
+      modalId={MODAL_EDIT_CATEGORY}
       trigger={<Icon link name="pencil alternate" />}
+      submitButtonLabel="Сохранить"
     >
-      <Modal.Header>Редактирование курса валют</Modal.Header>
-      <Modal.Content>
-        <ExchangeRateForm
-          id={formId}
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={() => setOpen(false)}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Сохранить
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <ExchangeRateForm initialValues={initialValues} onSubmit={handleSubmit} />
+    </FormModal>
   );
 };
 
