@@ -1,4 +1,5 @@
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
+import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
 import { Form } from 'semantic-ui-react';
@@ -10,7 +11,6 @@ export interface CategoryFormValues {
 }
 
 interface ExchangeRateFormProps {
-  id: string;
   initialValues: CategoryFormValues;
   onSubmit: (values: CategoryFormValues) => void;
 }
@@ -22,8 +22,9 @@ const TransferSchema = Yup.object().shape({
 const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
   initialValues,
   onSubmit,
-  id,
 }) => {
+  const formId = useFormId();
+
   const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<CategoryFormValues>({
       initialValues,
@@ -35,7 +36,7 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
     touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
-    <Form id={id} onSubmit={handleSubmit}>
+    <Form id={formId} onSubmit={handleSubmit}>
       <Form.Input
         name="name"
         label="Название"

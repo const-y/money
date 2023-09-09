@@ -1,11 +1,14 @@
+import { CreateAccountData, createAccount } from '@/api/accounts';
+import FormModal from '@/components/FormModal';
+import { MODAL_ADD_ACCOUNT } from '@/constants/modalIds';
 import queries from '@/constants/queries';
-import { FC, useState } from 'react';
+import { useModalState } from '@/context/ModalState';
+import assertIsNumber from '@/helpers/assertIsNumber';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import AccountForm, { AccountFormValues } from './AccountForm';
-import { CreateAccountData, createAccount } from '@/api/accounts';
-import assertIsNumber from '@/helpers/assertIsNumber';
 
 const INITIAL_VALUES: AccountFormValues = {
   name: '',
@@ -14,13 +17,13 @@ const INITIAL_VALUES: AccountFormValues = {
 } as const;
 
 const ModalAddForm: FC = () => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_ADD_ACCOUNT);
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(createAccount, {
     onSuccess: (data) => {
       toast.success(`Счет "${data.name}" успешно добавлен`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось добавить счет');
@@ -30,20 +33,16 @@ const ModalAddForm: FC = () => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: AccountFormValues) => {
     mutate(getCreateAccountData(values));
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
-    <Modal
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
+    <FormModal
+      title="Добавление счета"
+      submitting={isLoading}
+      modalId={MODAL_ADD_ACCOUNT}
+      submitButtonLabel="Создать"
       trigger={
         <Button basic>
           <Icon name="plus" />
@@ -51,23 +50,8 @@ const ModalAddForm: FC = () => {
         </Button>
       }
     >
-      <Modal.Header>Добавление счета</Modal.Header>
-      <Modal.Content>
-        <AccountForm
-          id={formId}
-          initialValues={INITIAL_VALUES}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={handleClose}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Создать
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <AccountForm initialValues={INITIAL_VALUES} onSubmit={handleSubmit} />
+    </FormModal>
   );
 };
 

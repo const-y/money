@@ -1,12 +1,15 @@
 import { Transaction, createTransaction } from '@/api/transactions';
+import FormModal from '@/components/FormModal';
+import { MODAL_TRANSFER } from '@/constants/modalIds';
+import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
 import assertIsDate from '@/helpers/assertIsDate';
 import assertIsNumber from '@/helpers/assertIsNumber';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import TransferForm, { TransferFormValues } from './ TransferForm';
-import queries from '@/constants/queries';
 
 interface ModalTransferProps {
   sourceAccountId: number;
@@ -15,12 +18,12 @@ interface ModalTransferProps {
 const TRANSFER_MODAL_TITLE = 'Перевод между счетами';
 
 const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_TRANSFER);
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(createTransaction, {
     onSuccess: () => {
       toast.success(`Перевод успешно выполнен`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось выполнить перевод');
@@ -34,20 +37,16 @@ const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (transferFormValues: TransferFormValues) => {
     mutate(createTransferTransactionData(transferFormValues));
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
-    <Modal
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
+    <FormModal
+      title={TRANSFER_MODAL_TITLE}
+      submitting={isLoading}
+      modalId={MODAL_TRANSFER}
+      submitButtonLabel="Создать"
       trigger={
         <Button basic>
           <Icon name="exchange" />
@@ -55,23 +54,11 @@ const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
         </Button>
       }
     >
-      <Modal.Header>{TRANSFER_MODAL_TITLE}</Modal.Header>
-      <Modal.Content>
-        <TransferForm
-          id={formId}
-          initialValues={getInitialValues(sourceAccountId)}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={handleClose}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Создать
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <TransferForm
+        initialValues={getInitialValues(sourceAccountId)}
+        onSubmit={handleSubmit}
+      />
+    </FormModal>
   );
 };
 

@@ -2,12 +2,15 @@ import {
   CreateExchangeRateData,
   createExchangeRate,
 } from '@/api/exchangeRates';
+import FormModal from '@/components/FormModal';
+import { MODAL_ADD_EXCHANGE_RATE } from '@/constants/modalIds';
 import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
 import assertCurrency from '@/helpers/assertCurrency';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import ExchangeRateForm, { ExchangeRateFormValues } from './ExhangeRateForm';
 
 const INITIAL_VALUES: ExchangeRateFormValues = {
@@ -18,12 +21,13 @@ const INITIAL_VALUES: ExchangeRateFormValues = {
 };
 
 const ModalAddForm: FC = () => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_ADD_EXCHANGE_RATE);
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(createExchangeRate, {
     onSuccess: (data) => {
       toast.success(`Запись успешно добавлена`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось добавить курс валюты');
@@ -33,41 +37,28 @@ const ModalAddForm: FC = () => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: ExchangeRateFormValues) => {
     mutate(getCreateExchangeRateData(values));
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
+    <FormModal
+      title="Добавление курса валют"
+      submitting={isLoading}
+      modalId={MODAL_ADD_EXCHANGE_RATE}
       trigger={
         <Button basic>
           <Icon name="plus" />
           Добавить
         </Button>
       }
+      submitButtonLabel="Создать"
     >
-      <Modal.Header>Добавление курса валют</Modal.Header>
-      <Modal.Content>
-        <ExchangeRateForm
-          id={formId}
-          initialValues={INITIAL_VALUES}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={() => setOpen(false)}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Создать
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <ExchangeRateForm
+        initialValues={INITIAL_VALUES}
+        onSubmit={handleSubmit}
+      />
+    </FormModal>
   );
 };
 
@@ -80,7 +71,7 @@ function getCreateExchangeRateData(
 
   return {
     currency,
-    base_currency: baseCurrency,
+    baseCurrency,
     date: date.toISOString(),
     rate,
   };

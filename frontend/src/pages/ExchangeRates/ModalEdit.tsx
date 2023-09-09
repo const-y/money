@@ -1,13 +1,15 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
-
-import { AccountType, updateAccountType } from '@/api/accountTypes';
-import queries from '@/constants/queries';
-import ExchangeRateForm, { ExchangeRateFormValues } from './ExhangeRateForm';
+import { Icon } from 'semantic-ui-react';
 import { ExchangeRate, updateExchangeRate } from '@/api/exchangeRates';
+import FormModal from '@/components/FormModal';
+import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
 import assertCurrency from '@/helpers/assertCurrency';
+import generateId from '@/helpers/generateId';
+import ExchangeRateForm, { ExchangeRateFormValues } from './ExhangeRateForm';
+import { MODAL_EDIT_EXCHANGE_RATE } from '@/constants/modalIds';
 
 interface ModalEditProps {
   initialValues: ExchangeRateFormValues;
@@ -15,12 +17,13 @@ interface ModalEditProps {
 }
 
 const ModalEdit: FC<ModalEditProps> = ({ initialValues, exchangeRateId }) => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_EDIT_EXCHANGE_RATE);
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(updateExchangeRate, {
     onSuccess: () => {
       toast.success('Запись успешно обновлена');
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось обновить курс');
@@ -30,8 +33,6 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues, exchangeRateId }) => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (values: ExchangeRateFormValues) => {
     assertCurrency(values.currency);
     assertCurrency(values.baseCurrency);
@@ -40,29 +41,15 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues, exchangeRateId }) => {
   };
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
+    <FormModal
+      title="Редактирование курса валют"
+      submitting={isLoading}
+      modalId={MODAL_EDIT_EXCHANGE_RATE}
       trigger={<Icon link name="pencil alternate" />}
+      submitButtonLabel="Сохранить"
     >
-      <Modal.Header>Редактирование курса валют</Modal.Header>
-      <Modal.Content>
-        <ExchangeRateForm
-          id={formId}
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={() => setOpen(false)}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Сохранить
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <ExchangeRateForm initialValues={initialValues} onSubmit={handleSubmit} />
+    </FormModal>
   );
 };
 
@@ -80,7 +67,7 @@ function getUpdateExchangeRateData({
   return {
     id: exchangeRateId,
     currency: currency,
-    base_currency: baseCurrency,
+    baseCurrency,
     date: date.toISOString(),
     rate,
   };
