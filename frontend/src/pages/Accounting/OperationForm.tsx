@@ -1,11 +1,10 @@
-import { CreateOperationRequestParams } from '@/api/operations';
 import CategorySelectField from '@/components/CategorySelectField';
+import Datepicker from '@/components/Datepicker';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-import { Form, Label } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 export interface OperationFormValues {
@@ -52,16 +51,15 @@ const OperationForm: FC<OperationFormProps> = ({
   const getError = (fieldName: keyof OperationFormValues) =>
     touched[fieldName] ? errors[fieldName] : undefined;
 
+  const handleDateChange = (value: Date) => setFieldValue('date', value);
+
   return (
     <Form id={id} onSubmit={handleSubmit}>
-      <SemanticDatepicker
-        name="date"
+      <Datepicker
         value={values.date}
-        onChange={(_event, data) => setFieldValue('date', data.value)}
-        format="YYYY-MM-DD"
-        label="Выберите дату"
-        required
+        onChange={handleDateChange}
         error={getError('date')}
+        required
       />
       <Form.Input
         name="amount"
