@@ -1,11 +1,13 @@
 import CategorySelectField from '@/components/CategorySelectField';
 import Datepicker from '@/components/Datepicker';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
+import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
+import OperationTypeRadioGroup from './OperationTypeRadioGroup';
 
 export interface OperationFormValues {
   amount: number;
@@ -13,10 +15,10 @@ export interface OperationFormValues {
   description: string;
   categoryId: number | null;
   counterpartyId: number;
+  isExpense: boolean;
 }
 
 interface OperationFormProps {
-  id: string;
   initialValues: OperationFormValues;
   onSubmit: (values: OperationFormValues) => void;
 }
@@ -36,11 +38,8 @@ const OperationSchema = Yup.object().shape({
   counterpartyId: Yup.number(),
 });
 
-const OperationForm: FC<OperationFormProps> = ({
-  initialValues,
-  onSubmit,
-  id,
-}) => {
+const OperationForm: FC<OperationFormProps> = ({ initialValues, onSubmit }) => {
+  const formId = useFormId();
   const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<OperationFormValues>({
       initialValues,
@@ -53,13 +52,25 @@ const OperationForm: FC<OperationFormProps> = ({
 
   const handleDateChange = (value: Date) => setFieldValue('date', value);
 
+  const handleCategorySelectFieldChange = (categoryId: number) =>
+    setFieldValue('categoryId', categoryId);
+
+  const handleOperationTypeRadioGroupChange = (isExpense: boolean) => {
+    setFieldValue('isExpense', isExpense);
+    setFieldValue('categoryId', initialValues.categoryId);
+  };
+
   return (
-    <Form id={id} onSubmit={handleSubmit}>
+    <Form id={formId} onSubmit={handleSubmit}>
       <Datepicker
         value={values.date}
         onChange={handleDateChange}
         error={getError('date')}
         required
+      />
+      <OperationTypeRadioGroup
+        isExpense={values.isExpense}
+        onChange={handleOperationTypeRadioGroupChange}
       />
       <Form.Input
         name="amount"
@@ -81,8 +92,9 @@ const OperationForm: FC<OperationFormProps> = ({
       />
       <CategorySelectField
         value={values.categoryId}
-        onChange={(categoryId) => setFieldValue('categoryId', categoryId)}
+        onChange={handleCategorySelectFieldChange}
         error={getError('categoryId')}
+        operationType={values.isExpense ? 'EXPENSE' : 'INCOME'}
       />
     </Form>
   );

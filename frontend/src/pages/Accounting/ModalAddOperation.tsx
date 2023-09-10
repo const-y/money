@@ -2,14 +2,17 @@ import {
   CreateOperationRequestParams,
   createOperation,
 } from '@/api/operations';
-import { FC, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
-import OperationForm, { OperationFormValues } from './OperationForm';
+import FormModal from '@/components/FormModal';
+import { MODAL_ADD_OPERATION } from '@/constants/modalIds';
+import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
 import assertIsDate from '@/helpers/assertIsDate';
 import assertIsNumber from '@/helpers/assertIsNumber';
-import queries from '@/constants/queries';
+import { FC } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
+import { Button, Icon } from 'semantic-ui-react';
+import OperationForm, { OperationFormValues } from './OperationForm';
 
 interface ModalAddOperationProps {
   accountId: number;
@@ -21,15 +24,16 @@ const initialValues: OperationFormValues = {
   description: '',
   categoryId: null,
   counterpartyId: 0,
+  isExpense: true,
 };
 
 const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
-  const [open, setOpen] = useState(false);
+  const { close } = useModalState(MODAL_ADD_OPERATION);
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(createOperation, {
     onSuccess: () => {
       toast.success(`Операция успешно добавлена`);
-      setOpen(false);
+      close();
     },
     onError: () => {
       toast.error('Не удалось добавить операцию');
@@ -39,44 +43,33 @@ const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
     },
   });
 
-  const formId = self.crypto.randomUUID();
-
   const handleSubmit = (formValues: OperationFormValues) => {
-    mutate(getAddOperationData({ accountId, formValues }));
+    const absAmount = Math.abs(formValues.amount);
+    const isExpense = formValues.isExpense;
+
+    const correctedFormValues = {
+      ...formValues,
+      amount: isExpense ? 0 - absAmount : absAmount,
+    };
+
+    mutate(getAddOperationData({ accountId, formValues: correctedFormValues }));
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
-    <Modal
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
+    <FormModal
+      title={'Добавление операции'}
+      submitting={isLoading}
+      modalId={MODAL_ADD_OPERATION}
       trigger={
         <Button basic>
           <Icon name="plus" />
           Добавить операцию
         </Button>
       }
+      submitButtonLabel="Создать"
     >
-      <Modal.Header>Добавление операции</Modal.Header>
-      <Modal.Content>
-        <OperationForm
-          id={formId}
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button basic onClick={handleClose}>
-          Отмена
-        </Button>
-        <Button type="submit" positive form={formId} loading={isLoading}>
-          Создать
-        </Button>
-      </Modal.Actions>
-    </Modal>
+      <OperationForm initialValues={initialValues} onSubmit={handleSubmit} />
+    </FormModal>
   );
 };
 
