@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
-import { FC, SyntheticEvent, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useQuery } from 'react-query';
-import { DropdownProps, Form } from 'semantic-ui-react';
+import { DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react';
 
-import { getAccountTypes } from '@/api/accountTypes';
+import { AccountType, getAccountTypes } from '@/api/accountTypes';
 import queries from '@/constants/queries';
 import { useFormId } from '@/context/FormId';
 
@@ -21,6 +21,7 @@ interface AccountFormProps {
 const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
   const formId = useFormId();
   const { data, isLoading } = useQuery(queries.ACCOUNT_TYPES, getAccountTypes);
+
   const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<AccountFormValues>({
       initialValues,
@@ -31,20 +32,9 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
   const getError = (fieldName: keyof AccountFormValues) =>
     touched[fieldName] ? errors[fieldName] : undefined;
 
-  const accountTypeOptions = useMemo(
-    () =>
-      data?.map(({ id, title }) => ({
-        key: id,
-        value: id,
-        text: title,
-      })) || [],
-    [data]
-  );
+  const accountTypeOptions = useMemo(() => getDropdownOptions(data), [data]);
 
-  const handleSelectAccountTypeChange = (
-    _event: SyntheticEvent<HTMLElement, Event>,
-    data: DropdownProps
-  ) => {
+  const handleSelectAccountTypeChange = (_event: any, data: DropdownProps) => {
     setFieldValue('accountType', data.value);
   };
 
@@ -79,5 +69,17 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
     </Form>
   );
 };
+
+function getDropdownOptions(
+  data: AccountType[] | undefined
+): DropdownItemProps[] {
+  if (!data) return [];
+
+  return data.map(({ id, title }) => ({
+    key: id,
+    value: id,
+    text: title,
+  }));
+}
 
 export default AccountForm;
