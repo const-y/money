@@ -1,11 +1,11 @@
+import { getAccountTypes } from '@/api/accountTypes';
+import queries from '@/constants/queries';
+import { useFormId } from '@/context/FormId';
+import getDropdownOptions from '@/helpers/getDropdownOptions';
 import { useFormik } from 'formik';
 import { FC, useMemo } from 'react';
 import { useQuery } from 'react-query';
-import { DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react';
-
-import { AccountType, getAccountTypes } from '@/api/accountTypes';
-import queries from '@/constants/queries';
-import { useFormId } from '@/context/FormId';
+import { DropdownProps, Form } from 'semantic-ui-react';
 
 export interface AccountFormValues {
   name: string;
@@ -32,7 +32,10 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
   const getError = (fieldName: keyof AccountFormValues) =>
     touched[fieldName] ? errors[fieldName] : undefined;
 
-  const accountTypeOptions = useMemo(() => getDropdownOptions(data), [data]);
+  const accountTypeOptions = useMemo(
+    () => getDropdownOptions(data, (accountType) => accountType.title),
+    [data]
+  );
 
   const handleSelectAccountTypeChange = (_event: any, data: DropdownProps) => {
     setFieldValue('accountType', data.value);
@@ -69,17 +72,5 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
     </Form>
   );
 };
-
-function getDropdownOptions(
-  data: AccountType[] | undefined
-): DropdownItemProps[] {
-  if (!data) return [];
-
-  return data.map(({ id, title }) => ({
-    key: id,
-    value: id,
-    text: title,
-  }));
-}
 
 export default AccountForm;
