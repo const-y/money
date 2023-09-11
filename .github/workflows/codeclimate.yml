@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tests
         run: |
-          coverage run backend/manage.py test
+          coverage run backend/manage.py test backend
 
       - name: Upload test coverage to CodeClimate
         env:
