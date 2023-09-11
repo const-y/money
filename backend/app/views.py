@@ -207,7 +207,7 @@ class TransactionListCreateView(generics.ListCreateAPIView):
                 transaction=transaction, account=account, **operation_data)
 
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_2, headers=headers)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
 class TransactionRetrieveUpdateView(generics.RetrieveUpdateAPIView):
