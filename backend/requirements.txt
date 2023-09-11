@@ -3,3 +3,5 @@ djangorestframework
 django-cors-headers
 drf-yasg
 djangorestframework-camel-case
+coverage
+codeclimate-test-reporter
