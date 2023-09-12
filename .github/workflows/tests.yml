@@ -18,9 +18,13 @@ jobs:
         with:
           python-version: 3.11
 
+      - name: Install venv
+        run: |
+          make install_venv
+
       - name: Install dependencies
         run: |
-          pip install -r backend/requirements.txt
+          make bootstrap
 
       - name: Run tests
         run: |
