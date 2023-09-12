@@ -11,7 +11,8 @@ VITE_RUN = cd $(FRONTEND_DIR) && yarn dev
 
 .PHONY: backend frontend
 
-all: backend frontend bootstrap
+install_venv:
+	cd backend && python3 -m venv env
 
 # Запуск бэкенда
 backend:
@@ -29,4 +30,7 @@ bootstrap:
 	$(ACTIVATE_VENV) && cd backend && pip install -r requirements.txt
 
 test: 
+	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .
+
+coverage:
 	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .

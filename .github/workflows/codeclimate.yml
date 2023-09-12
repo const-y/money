@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
@@ -23,9 +23,10 @@ jobs:
           pip install -r backend/requirements.txt
           pip install coverage
 
-      - name: Run tests
+      - name: Run tests and generate coverage report
         run: |
           coverage run backend/manage.py test backend
+          coverage xml
 
       - name: Upload test coverage to CodeClimate
         env:
@@ -34,5 +35,5 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          ./cc-test-reporter format-coverage -t lcov -o codeclimate.json coverage.lcov
-          ./cc-test-reporter upload-coverage -i codeclimate.json
+          ./cc-test-reporter format-coverage coverage.xml -t coverage.py
+          ./cc-test-reporter upload-coverage
