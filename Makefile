@@ -30,3 +30,6 @@ bootstrap:
 
 test: 
 	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .
+
+coverage:
+	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .
