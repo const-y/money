@@ -3,7 +3,7 @@ name: CodeClimate Test Coverage
 on:
   push:
     branches:
-      - python-coverage
+      - main
 
 jobs:
   codeclimate:
@@ -23,7 +23,7 @@ jobs:
           pip install -r backend/requirements.txt
           pip install coverage
 
-      - name: Run tests
+      - name: Run tests and generate coverage report
         run: |
           coverage run backend/manage.py test backend
           coverage xml
