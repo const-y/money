@@ -192,23 +192,6 @@ class TransactionListCreateView(generics.ListCreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def update(self, request, *args, **kwargs):
-        transactions_data = request.data
-        operations_data = transactions_data.pop('operations', [])
-
-        serializer = self.get_serializer(data=transactions_data)
-        serializer.is_valid(raise_exception=True)
-        transaction = serializer.save()
-
-        for operation_data in operations_data:
-            account_id = operation_data.pop('account')
-            account = Account.objects.get(pk=account_id)
-            Operation.objects.create(
-                transaction=transaction, account=account, **operation_data)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
-
 
 class TransactionRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Transaction.objects.all()
