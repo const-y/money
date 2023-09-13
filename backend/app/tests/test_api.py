@@ -77,7 +77,5 @@ class ReportsApiTestCase(APITestCase):
         serializer_data = ExpensesByCurrenciesReportSerializer(
             raw_data, many=True).data
 
-        print(serializer_data)
-
         self.assertEqual(200, response.status_code)
         self.assertEqual(serializer_data, response.data)

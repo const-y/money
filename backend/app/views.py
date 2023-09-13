@@ -2,7 +2,7 @@ from rest_framework import views, status
 from .models import AccountType, Account, Setting, Operation, Transaction, Category, Counterparty, CurrencyRate
 from .serializers import (AccountTypeSerializer, AccountSerializer, SettingSerializer, CapitalSerializer,
                           CategorySerializer, TransactionSerializer, AccountOperationSerializer, CurrencyRateSerializer,
-                          IncomeExpensesReportSerializer, ExpensesByCurrenciesReportSerializer)
+                          IncomeExpensesReportSerializer, ExpensesByCurrenciesReportSerializer, ExpensesByCurrenciesDetailsReportSerializer)
 from rest_framework.response import Response
 from .helpers import convert_currency
 from django.db.models import F
@@ -259,6 +259,30 @@ class ExpensesByCurrenciesReportView(views.APIView):
         data = service.get_expenses_grouped_by_currency(year=year)
 
         serializer = ExpensesByCurrenciesReportSerializer(
+            data, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ExpensesByCurrenciesDetailsReportView(views.APIView):
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('currency', openapi.IN_QUERY,
+                          description="Валюта", type=openapi.TYPE_STRING),
+        openapi.Parameter('year', openapi.IN_QUERY,
+                          description="Год", type=openapi.TYPE_NUMBER),
+        openapi.Parameter('month', openapi.IN_QUERY,
+                          description="Месяц", type=openapi.TYPE_NUMBER),
+    ], responses={200: IncomeExpensesReportSerializer()})
+    def get(self, request, *args, **kwargs):
+        year = kwargs.get('year')
+        month = kwargs.get('month')
+        currency = kwargs.get('currency')
+
+        service = ReportService()
+        data = service.get_expenses_grouped_by_currency_details(
+            currency=currency, year=year, month=month)
+
+        serializer = ExpensesByCurrenciesDetailsReportSerializer(
             data, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
