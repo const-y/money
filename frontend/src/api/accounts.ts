@@ -1,17 +1,6 @@
-import api, { Entity } from './api';
-
-export interface Account extends Entity {
-  accountType: number;
-  currency: string;
-  name: string;
-  balance: number;
-}
-
-export interface CreateAccountData {
-  name: string;
-  currency: string;
-  accountType: number;
-}
+import Account from '@/models/Account';
+import api from './api';
+import { CreateAccount } from '@/models/CreateAccount';
 
 export const getAccounts = () =>
   api.get<Account[]>('/accounts/').then((result) => result.data);
@@ -19,7 +8,7 @@ export const getAccounts = () =>
 export const getAccount = (accountId: number) =>
   api.get<Account>(`/accounts/${accountId}/`).then((result) => result.data);
 
-export const createAccount = (data: CreateAccountData) =>
+export const createAccount = (data: CreateAccount) =>
   api.post<Account>('/accounts/', data).then((result) => result.data);
 
 export const deleteAccount = (id: number) =>

@@ -16,6 +16,18 @@ export interface ExpensesByCurrenciesReportDataItem {
   totalAmount: number;
 }
 
+export interface GetExpensesBuCurrenciesDetailsReportArg {
+  currency: string;
+  year: number;
+  month: number;
+}
+
+export interface ExpensesBuCurrenciesDetailsReportItem {
+  id: number;
+  name: string;
+  totalAmount: number;
+}
+
 export const getIncomeExpensesReport = (params: Period) =>
   api
     .get<IncomeExpensesReportData>('/reports/income-expenses', { params })
@@ -28,5 +40,16 @@ export const getExpensesBuCurrenciesReport = (year: number) =>
       {
         params: { year },
       }
+    )
+    .then((result) => result.data);
+
+export const getExpensesBuCurrenciesDetailsReport = ({
+  currency,
+  year,
+  month,
+}: GetExpensesBuCurrenciesDetailsReportArg) =>
+  api
+    .get<ExpensesBuCurrenciesDetailsReportItem[]>(
+      `/reports/expenses-by-currencies/${currency}/${year}/${month}`
     )
     .then((result) => result.data);
