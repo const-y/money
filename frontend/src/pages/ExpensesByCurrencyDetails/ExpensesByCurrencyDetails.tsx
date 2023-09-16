@@ -5,14 +5,15 @@ import {
 import queries from '@/constants/queries';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
-import { Params, useNavigate, useParams } from 'react-router-dom';
-import { Breadcrumb, Button, Header, Icon, Loader } from 'semantic-ui-react';
+import { Params, useParams } from 'react-router-dom';
+import { Header, Loader } from 'semantic-ui-react';
+import ExpensesByCurrencyDetailsBreadcrumb from './ExpensesByCurrencyDetailsBreadcrumb';
 import ExpensesByCurrencyDetailsChart from './ExpensesByCurrencyDetailsChart';
-import routes from '@/constants/routes';
 
 const ExpensesByCurrencyDetails: FC = () => {
   const { currency, year, month } = useParams();
-  const navigate = useNavigate();
+  const header = `Детализация расходов (${currency}) ${year}-${month}`;
+
   const { data, isLoading } = useQuery(
     queries.EXPENSES_BY_CURRENCIES_REPORT,
     () =>
@@ -25,21 +26,9 @@ const ExpensesByCurrencyDetails: FC = () => {
     return <Loader active />;
   }
 
-  const handleBack = () => {
-    navigate(`/${routes.EXPENSES_BY_CURRENCIES_REPORT}`);
-  };
-
-  const header = `Детализация расходов (${currency}) ${year}-${month}`;
-
   return (
     <>
-      <Breadcrumb>
-        <Breadcrumb.Section link onClick={handleBack}>
-          Расходы по валютам
-        </Breadcrumb.Section>
-        <Breadcrumb.Divider />
-        <Breadcrumb.Section active>{header}</Breadcrumb.Section>
-      </Breadcrumb>
+      <ExpensesByCurrencyDetailsBreadcrumb header={header} />
       <Header as="h1">{header}</Header>
       <ExpensesByCurrencyDetailsChart data={data} />
     </>
