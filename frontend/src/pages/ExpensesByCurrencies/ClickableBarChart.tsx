@@ -19,9 +19,17 @@ const options = {
 const ClickableBarChart: FC<ClickableBarChartProps> = ({ data, onClick }) => {
   const chartRef = useRef<Chart<'bar'> | null>(null);
 
-  const handleClick = (event: MouseEvent<HTMLCanvasElement>) => {
-    const { current: chart } = chartRef;
+  const updateCursor = (
+    chart: Chart<'bar'>,
+    event: MouseEvent<HTMLCanvasElement>
+  ) => {
+    chart.canvas.style.cursor = getElementAtEvent(chart, event).length
+      ? 'pointer'
+      : 'auto';
+  };
 
+  const handleClick = (event: MouseEvent<HTMLCanvasElement>) => {
+    const chart = chartRef.current;
     const index = getClickedElementIndex(event, chart);
 
     if (index !== null) {
@@ -30,12 +38,11 @@ const ClickableBarChart: FC<ClickableBarChartProps> = ({ data, onClick }) => {
   };
 
   const handleMouseMove = (event: MouseEvent<HTMLCanvasElement>) => {
-    const { current: chart } = chartRef;
+    const chart = chartRef.current;
 
-    if (!chart) return;
-
-    const element = getElementAtEvent(chart, event);
-    chart.canvas.style.cursor = element.length ? 'pointer' : 'auto';
+    if (chart) {
+      updateCursor(chart, event);
+    }
   };
 
   return (
