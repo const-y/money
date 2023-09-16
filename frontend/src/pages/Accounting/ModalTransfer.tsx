@@ -81,8 +81,6 @@ function createTransferTransactionData({
   targetAccountId,
   targetAmount,
 }: TransferFormValues): Transaction {
-  const TRANSFER_CATEGORY_ID = 3;
-
   assertIsDate(date);
   assertIsNumber(sourceAccountId);
   assertIsNumber(targetAccountId);
@@ -90,9 +88,8 @@ function createTransferTransactionData({
   return {
     description,
     date: date.toISOString(),
-    category: TRANSFER_CATEGORY_ID,
     operations: [
-      { account: sourceAccountId, amount: sourceAmount },
+      { account: sourceAccountId, amount: -Math.abs(sourceAmount) },
       { account: targetAccountId, amount: targetAmount },
     ],
   };

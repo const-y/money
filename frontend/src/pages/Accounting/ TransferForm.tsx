@@ -1,11 +1,10 @@
 import AccountSelectField from '@/components/AccountSelectField';
+import Datepicker from '@/components/Datepicker';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-import { SemanticDatepickerProps } from 'react-semantic-ui-datepickers/dist/types';
 import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
@@ -44,11 +43,8 @@ const TransferForm: FC<TransferFormProps> = ({ initialValues, onSubmit }) => {
       onSubmit,
     });
 
-  const handleDateChange = (
-    _event: React.SyntheticEvent<Element, Event> | undefined,
-    data: SemanticDatepickerProps
-  ) => {
-    setFieldValue('date', data.value);
+  const handleDateChange = (value: Date) => {
+    setFieldValue('date', value);
   };
 
   const createAccountSelectChangeHandler =
@@ -61,12 +57,9 @@ const TransferForm: FC<TransferFormProps> = ({ initialValues, onSubmit }) => {
 
   return (
     <Form id={formId} onSubmit={handleSubmit}>
-      <SemanticDatepicker
-        name="date"
+      <Datepicker
         value={values.date}
         onChange={handleDateChange}
-        format="YYYY-MM-DD"
-        label="Выберите дату"
         required
         error={getError('date')}
       />
