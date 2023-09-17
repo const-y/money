@@ -7,7 +7,7 @@ interface ClickableBarChartProps {
   onClick: (index: number) => void;
 }
 
-const options = {
+const CLICKABLE_BAR_CHART_OPTIONS = {
   responsive: true,
   plugins: {
     legend: {
@@ -18,15 +18,6 @@ const options = {
 
 const ClickableBarChart: FC<ClickableBarChartProps> = ({ data, onClick }) => {
   const chartRef = useRef<Chart<'bar'> | null>(null);
-
-  const updateCursor = (
-    chart: Chart<'bar'>,
-    event: MouseEvent<HTMLCanvasElement>
-  ) => {
-    chart.canvas.style.cursor = getElementAtEvent(chart, event).length
-      ? 'pointer'
-      : 'auto';
-  };
 
   const handleClick = (event: MouseEvent<HTMLCanvasElement>) => {
     const chart = chartRef.current;
@@ -48,7 +39,7 @@ const ClickableBarChart: FC<ClickableBarChartProps> = ({ data, onClick }) => {
   return (
     <Bar
       ref={chartRef}
-      options={options}
+      options={CLICKABLE_BAR_CHART_OPTIONS}
       data={data}
       onClick={handleClick}
       onMouseMove={handleMouseMove}
@@ -67,6 +58,15 @@ function getClickedElementIndex(
   if (!element.length) return null;
 
   return element[0].index;
+}
+
+function updateCursor(
+  chart: Chart<'bar'>,
+  event: MouseEvent<HTMLCanvasElement>
+) {
+  chart.canvas.style.cursor = getElementAtEvent(chart, event).length
+    ? 'pointer'
+    : 'auto';
 }
 
 export default ClickableBarChart;
