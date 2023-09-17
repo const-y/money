@@ -1,7 +1,9 @@
 import { ExpensesByCurrenciesReportDataItem } from '@/api/reports';
 import { FC, Fragment, useMemo } from 'react';
-import { Bar } from 'react-chartjs-2';
 import { Header } from 'semantic-ui-react';
+import ClickableBarChart from './ClickableBarChart';
+import { useNavigate } from 'react-router-dom';
+import routes from '@/constants/routes';
 
 interface ExpensesByCurrenciesChartProps {
   data: ExpensesByCurrenciesReportDataItem[];
@@ -22,19 +24,11 @@ const LABELS = [
   'Декабрь',
 ];
 
-const OPTIONS = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-};
-
 const ExpensesByCurrenciesChart: FC<ExpensesByCurrenciesChartProps> = ({
   data,
 }) => {
   const datasetsMap = useMemo(() => getDatasetsMap(data), [data]);
+  const navigate = useNavigate();
 
   const getChartData = (currency: string) => {
     const datasets = [
@@ -55,13 +49,21 @@ const ExpensesByCurrenciesChart: FC<ExpensesByCurrenciesChartProps> = ({
     <>
       <Header as="h1">Расходы по валютам</Header>
       {Object.keys(datasetsMap).map((currency) => {
+        const handleBarChartClick = (index: number) => {
+          const month = index + 1;
+          const year = new Date().getFullYear();
+
+          navigate(
+            `/${routes.EXPENSES_BY_CURRENCIES_REPORT}/${currency}/${year}/${month}`
+          );
+        };
+
         return (
           <Fragment key={currency}>
             <Header as="h2">{currency}</Header>
-            <Bar
-              key={currency}
-              options={OPTIONS}
+            <ClickableBarChart
               data={getChartData(currency)}
+              onClick={handleBarChartClick}
             />
           </Fragment>
         );

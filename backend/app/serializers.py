@@ -64,7 +64,15 @@ class IncomeExpensesReportSerializer(serializers.Serializer):
     expenses = serializers.FloatField()
 
 
-class ExpensesByCurrenciesReportSerializer(serializers.Serializer):
+class _TotalAmountSerializer(serializers.Serializer):
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+
+class ExpensesByCurrenciesReportSerializer(_TotalAmountSerializer):
     currency = serializers.CharField()
     month = serializers.IntegerField()
-    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+
+class ExpensesByCurrenciesDetailsReportSerializer(_TotalAmountSerializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
