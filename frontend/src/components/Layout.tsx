@@ -8,10 +8,12 @@ import Footer from './Footer';
 const Layout: FC = () => (
   <div>
     <AppMenu />
-    <Container style={{ marginTop: '7em', minHeight: '30rem' }}>
-      <Outlet />
-    </Container>
-    <Footer />
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Container style={{ paddingTop: '7em', flex: 1 }}>
+        <Outlet />
+      </Container>
+      <Footer />
+    </div>
   </div>
 );
 
