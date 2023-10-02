@@ -88,7 +88,7 @@ function getAddOperationData({
   return {
     account: accountId,
     amount,
-    date: date.toISOString(),
+    date: date.toISOString().substring(0, 10),
     description,
     category: categoryId,
     counterparty: counterpartyId,
