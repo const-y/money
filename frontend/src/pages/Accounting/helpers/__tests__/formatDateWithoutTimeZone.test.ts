@@ -18,4 +18,10 @@ describe('formatDateWithoutTimeZone()', () => {
     const formattedDate = formatDateWithoutTimeZone(inputDate);
     expect(formattedDate).toBe('2023-02-01');
   });
+
+  it('should ignore local time zone', () => {
+    const inputDate = new Date('2023-10-07T01:23:45.678+04:00'); // Georgian time
+    const formattedDate = formatDateWithoutTimeZone(inputDate);
+    expect(formattedDate).toBe('2023-10-07');
+  });
 });
