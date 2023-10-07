@@ -1,10 +1,10 @@
 import { FC, MouseEvent, useState } from 'react';
 import { Grid, Header, MenuItemProps, Segment } from 'semantic-ui-react';
-import AccountsMenu from './AccountsMenu';
-import ModalAddOperation from './ModalAddOperation';
-import OperationsTable from './OperationsTable';
-import ModalTransfer from './ModalTransfer';
-import ModalChangeAmount from './ModalChangeAmount';
+import AccountsMenu from './components/AccountsMenu';
+import ModalAddOperation from './components/ModalAddOperation';
+import OperationsTable from './components/OperationsTable';
+import ModalTransfer from './components/ModalTransfer';
+import ModalChangeAmount from './components/ModalChangeAmount';
 
 const Accounting: FC = () => {
   const [activeAccountId, setActiveAccountId] = useState(0);
