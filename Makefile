@@ -30,7 +30,7 @@ bootstrap:
 	$(ACTIVATE_VENV) && cd backend && pip install -r requirements.txt
 
 test: 
-	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .
+	$(ACTIVATE_VENV) && cd backend && python3 manage.py test . && cd ../frontend && yarn test
 
 coverage:
 	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .

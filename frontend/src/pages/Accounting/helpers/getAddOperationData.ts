@@ -2,6 +2,7 @@ import { CreateOperationRequestParams } from '@/api/operations';
 import assertIsDate from '@/helpers/assertIsDate';
 import assertIsNumber from '@/helpers/assertIsNumber';
 import { OperationFormValues } from '../components/OperationForm';
+import formatDateWithoutTimeZone from './formatDateWithoutTimeZone';
 
 export default function getAddOperationData({
   accountId,
@@ -18,7 +19,7 @@ export default function getAddOperationData({
   return {
     account: accountId,
     amount,
-    date: date.toISOString().substring(0, 10),
+    date: formatDateWithoutTimeZone(date),
     description,
     category: categoryId,
     counterparty: counterpartyId,
