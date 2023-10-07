@@ -27,10 +27,10 @@ frontend:
 	$(VITE_RUN)
 
 bootstrap:
-	$(ACTIVATE_VENV) && cd backend && pip install -r requirements.txt
+	$(ACTIVATE_VENV) && cd backend && pip install -r requirements.txt && cd ../frontend && yarn install
 
 test: 
-	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .
+	$(ACTIVATE_VENV) && cd backend && python3 manage.py test . && cd ../frontend && yarn test
 
 coverage:
 	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .

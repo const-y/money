@@ -12,6 +12,7 @@ interface DatepickerProps {
 }
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const LOCALE = 'ru-RU';
 
 const Datepicker: FC<DatepickerProps> = ({
   value,
@@ -33,6 +34,7 @@ const Datepicker: FC<DatepickerProps> = ({
       label={label}
       required={required}
       error={error}
+      locale={LOCALE}
     />
   );
 };
