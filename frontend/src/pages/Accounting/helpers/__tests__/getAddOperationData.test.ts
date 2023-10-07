@@ -34,7 +34,7 @@ describe('getAddOperationData()', () => {
     const formValues: OperationFormValues = {
       amount: 100,
       description: 'Test Operation',
-      date: new Date('2023-10-07T01:23:45.678+04:00'),
+      date: new Date('2023-10-07T00:00:00+04:00'),
       categoryId: 5,
       counterpartyId: 10,
       isExpense: true,
