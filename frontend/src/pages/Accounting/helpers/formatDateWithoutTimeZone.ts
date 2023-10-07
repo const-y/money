@@ -1,7 +1,6 @@
 export default function formatDateWithoutTimeZone(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+  const targetDate = new Date(date.getTime() - userTimezoneOffset);
 
-  return `${year}-${month}-${day}`;
+  return targetDate.toISOString().substring(0, 10);
 }
