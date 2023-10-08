@@ -7,7 +7,7 @@ import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Icon } from 'semantic-ui-react';
-import ExchangeRateForm, { CategoryFormValues } from './CategoryForm';
+import CategoryForm, { CategoryFormValues } from './CategoryForm';
 
 interface ModalEditProps {
   initialValues: CategoryFormValues;
@@ -43,7 +43,7 @@ const ModalEdit: FC<ModalEditProps> = ({ initialValues, categoryId }) => {
       trigger={<Icon link name="pencil alternate" />}
       submitButtonLabel="Сохранить"
     >
-      <ExchangeRateForm initialValues={initialValues} onSubmit={handleSubmit} />
+      <CategoryForm initialValues={initialValues} onSubmit={handleSubmit} />
     </FormModal>
   );
 };
