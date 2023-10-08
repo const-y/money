@@ -7,7 +7,7 @@ import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Button, Icon } from 'semantic-ui-react';
-import ExchangeRateForm, { CategoryFormValues } from './CategoryForm';
+import CategoryForm, { CategoryFormValues } from './CategoryForm';
 
 const INITIAL_VALUES: CategoryFormValues = {
   name: '',
@@ -37,7 +37,7 @@ const ModalAddForm: FC = () => {
 
   return (
     <FormModal
-      title="Добавление курса валюты"
+      title="Добавление категории"
       submitting={isLoading}
       modalId={MODAL_ADD_CATEGORY}
       trigger={
@@ -48,10 +48,7 @@ const ModalAddForm: FC = () => {
       }
       submitButtonLabel="Создать"
     >
-      <ExchangeRateForm
-        initialValues={INITIAL_VALUES}
-        onSubmit={handleSubmit}
-      />
+      <CategoryForm initialValues={INITIAL_VALUES} onSubmit={handleSubmit} />
     </FormModal>
   );
 };

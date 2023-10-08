@@ -10,25 +10,22 @@ export interface CategoryFormValues {
   isExpense: boolean;
 }
 
-interface ExchangeRateFormProps {
+interface CategoryFormProps {
   initialValues: CategoryFormValues;
   onSubmit: (values: CategoryFormValues) => void;
 }
 
-const TransferSchema = Yup.object().shape({
+const CategorySchema = Yup.object().shape({
   name: Yup.string().required(REQUIRED_FIELD_ERROR_MESSAGE),
 });
 
-const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
-  initialValues,
-  onSubmit,
-}) => {
+const CategoryForm: FC<CategoryFormProps> = ({ initialValues, onSubmit }) => {
   const formId = useFormId();
 
   const { handleChange, values, errors, touched, handleSubmit, setFieldValue } =
     useFormik<CategoryFormValues>({
       initialValues,
-      validationSchema: TransferSchema,
+      validationSchema: CategorySchema,
       onSubmit,
     });
 
@@ -57,4 +54,4 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
   );
 };
 
-export default ExchangeRateForm;
+export default CategoryForm;
