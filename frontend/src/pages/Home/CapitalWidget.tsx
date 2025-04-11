@@ -16,6 +16,10 @@ const CapitalWidget = () => {
     return <Loader active inline />;
   }
 
+  if (!baseCurrency) {
+    return null;
+  }
+
   const formattedCapital =
     typeof capital === 'number' ? formatCurrency(capital, baseCurrency) : '';
 

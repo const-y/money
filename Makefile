@@ -1,36 +1,18 @@
-# Команды для активации виртуального окружения и бэкенда
-VENV_DIR = backend/env
-ACTIVATE_VENV = . $(VENV_DIR)/bin/activate
-DJANGO_MANAGE = backend/manage.py
-DJANGO_RUN = python3 $(DJANGO_MANAGE) runserver
-DJANGO_MIGRATE = python3 $(DJANGO_MANAGE) migrate
+up:
+	docker-compose up --build
 
-# Команды для фронтенда
-FRONTEND_DIR = frontend
-VITE_RUN = cd $(FRONTEND_DIR) && yarn dev
+down:
+	docker-compose down
 
-.PHONY: backend frontend
-
-install_venv:
-	cd backend && python3 -m venv env
-
-# Запуск бэкенда
-backend:
-	$(ACTIVATE_VENV) && $(DJANGO_RUN)
-
-# Выполнение миграций
 migrate:
-	$(ACTIVATE_VENV) && $(DJANGO_MIGRATE)
+	docker-compose exec backend python manage.py migrate
 
-# Запуск фронтенда
-frontend:
-	$(VITE_RUN)
+createsuperuser:
+	docker-compose exec backend python manage.py createsuperuser
 
-bootstrap:
-	$(ACTIVATE_VENV) && cd backend && pip install -r requirements.txt && cd ../frontend && yarn install
+frontend-install:
+	docker-compose exec frontend npm install
 
-test: 
-	$(ACTIVATE_VENV) && cd backend && python3 manage.py test . && cd ../frontend && yarn test
+backend-install:
+	docker-compose exec backend pip install -r requirements.txt
 
-coverage:
-	$(ACTIVATE_VENV) && cd backend && python3 manage.py test .

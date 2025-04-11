@@ -25,7 +25,7 @@ export default function AppTable<T extends Entity>({
   columns,
   data,
   getRowOptions,
-}: AppTableProps<T>) {
+}: Readonly<AppTableProps<T>>) {
   return (
     <Table celled>
       <Table.Header>
