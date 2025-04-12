@@ -1,6 +1,7 @@
+.PHONY: up down migrations migrate load-data setup superuser frontend-install backend-install
+
 up:
-	docker-compose up --build
-	migrate
+	docker-compose up --build --remove-orphans -d
 
 down:
 	docker-compose down
@@ -11,12 +12,9 @@ migrations:
 migrate:
 	docker-compose exec backend python manage.py migrate
 
-load-data: migrate
+load-data:
 	docker-compose exec backend python manage.py loaddata ./fixtures/data.json
-
-init: load-data
-	up
-
+	
 superuser:
 	docker-compose exec backend python manage.py createsuperuser
 
@@ -26,3 +24,7 @@ frontend-install:
 backend-install:
 	docker-compose exec backend pip install -r requirements.txt
 
+logs:
+	docker-compose logs -f
+
+setup: up migrate load-data logs

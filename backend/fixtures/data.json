@@ -5,5 +5,15 @@
     "fields": {
       "value": "RUB"
     }
+  },
+  {
+    "model": "app.currencyrate",
+    "pk": 1,
+    "fields": {
+      "currency": "RUB",
+      "base_currency": "RUB",
+      "date": "2000-01-01",
+      "rate": 1
+    }
   }
 ]
