@@ -10,7 +10,12 @@ migrations:
 
 migrate:
 	docker-compose exec backend python manage.py migrate
+
+load-data: migrate
 	docker-compose exec backend python manage.py loaddata ./fixtures/data.json
+
+init: load-data
+	up
 
 superuser:
 	docker-compose exec backend python manage.py createsuperuser
