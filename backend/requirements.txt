@@ -4,3 +4,5 @@ django-cors-headers
 drf-yasg
 djangorestframework-camel-case
 coverage
+psycopg2-binary
+python-dotenv

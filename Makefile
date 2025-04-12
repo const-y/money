@@ -1,10 +1,10 @@
 .PHONY: up down migrations migrate load-data setup superuser frontend-install backend-install
 
 up:
-	docker-compose up --build --remove-orphans -d
+	docker-compose up --build -d
 
 down:
-	docker-compose down
+	docker-compose down --remove-orphans
 
 migrations:
 	docker-compose exec backend python manage.py makemigrations
@@ -27,4 +27,8 @@ backend-install:
 logs:
 	docker-compose logs -f
 
-setup: up migrate load-data logs
+wait-for-db:
+	docker-compose exec backend sh -c 'until nc -z db 5432; do echo "Waiting for db..."; sleep 1; done'
+
+
+setup: up wait-for-db migrate load-data logs
