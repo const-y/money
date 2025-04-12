@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 
 interface CommonModalDeleteProps {

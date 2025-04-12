@@ -1,7 +1,8 @@
 import settingKeys from '@/constants/settingKeys';
 import useSettings from '@/hooks/useSettings';
+import { Badge } from '@mantine/core';
 import { FC } from 'react';
-import { Header, Label, Segment } from 'semantic-ui-react';
+import { Header, Segment } from 'semantic-ui-react';
 import CapitalWidget from './CapitalWidget';
 
 const Home: FC = () => {
@@ -14,10 +15,7 @@ const Home: FC = () => {
       <CapitalWidget />
       <Segment loading={isLoading}>
         <Header as="h3">Примененные настройки</Header>
-        <Label>
-          Базовая валюта:
-          <Label.Detail>{baseCurrency}</Label.Detail>
-        </Label>
+        <Badge> {`Базовая валюта: ${baseCurrency}`}</Badge>
       </Segment>
     </>
   );

@@ -1,3 +1,5 @@
+import { MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -7,18 +9,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'semantic-ui-css/semantic.min.css';
 
 import Layout from './components/Layout';
-import Accounting from './pages/Accounting';
-import AccountTypes from './pages/AccountTypes';
-import Home from './pages/Home';
-import Planning from './pages/Planning';
 import routes from './constants/routes';
-import Accounts from './pages/Accounts';
-import ExchangeRates from './pages/ExchangeRates';
-import Categories from './pages/Categories';
-import IncomeExpenses from './pages/IncomeExpenses';
-import ExpensesByCurrencies from './pages/ExpensesByCurrencies/ExpensesByCurrencies';
 import { ModalStateProvider } from './context/ModalState';
+import Accounting from './pages/Accounting';
+import Accounts from './pages/Accounts';
+import AccountTypes from './pages/AccountTypes';
+import Categories from './pages/Categories';
+import ExchangeRates from './pages/ExchangeRates';
+import ExpensesByCurrencies from './pages/ExpensesByCurrencies/ExpensesByCurrencies';
 import ExpensesByCurrencyDetails from './pages/ExpensesByCurrencyDetails';
+import Home from './pages/Home';
+import IncomeExpenses from './pages/IncomeExpenses';
+import Planning from './pages/Planning';
 
 const router = createBrowserRouter([
   {
@@ -54,7 +56,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ModalStateProvider>
-        <RouterProvider router={router} />
+        <MantineProvider>
+          <RouterProvider router={router} />
+        </MantineProvider>
       </ModalStateProvider>
     </QueryClientProvider>
     <ToastContainer />
