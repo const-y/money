@@ -1,9 +1,8 @@
 import { FormIdProvider } from '@/context/FormId';
 import { useModalState } from '@/context/ModalState';
 import generateId from '@/helpers/generateId';
-import { FC, ReactNode } from 'react';
-import { Modal } from 'semantic-ui-react';
-import { Button } from '@/components/ui';
+import { FC, ReactElement, ReactNode } from 'react';
+import { Button, Modal } from '@/components/ui';
 
 interface FormModalProps {
   children: ReactNode;
@@ -12,7 +11,7 @@ interface FormModalProps {
   submitButtonLabel?: string;
   submitting: boolean;
   modalId: string;
-  trigger: ReactNode;
+  trigger: ReactElement;
 }
 
 const FormModal: FC<FormModalProps> = ({
@@ -29,11 +28,14 @@ const FormModal: FC<FormModalProps> = ({
   const formId = generateId();
 
   return (
-    <Modal onClose={close} onOpen={open} open={isOpen} trigger={trigger}>
-      <Modal.Header>{title}</Modal.Header>
-      <Modal.Content>
-        <FormIdProvider formId={formId}>{children}</FormIdProvider>
-      </Modal.Content>
+    <Modal
+      onClose={close}
+      onOpen={open}
+      opened={isOpen}
+      trigger={trigger}
+      title={title}
+    >
+      <FormIdProvider formId={formId}>{children}</FormIdProvider>
       <Modal.Actions>
         <Button onClick={close} basic>
           {cancelButtonLabel}

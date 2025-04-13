@@ -3,12 +3,12 @@ import queries from '@/constants/queries';
 import { FC, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Icon, Loader, Modal } from 'semantic-ui-react';
+import { Icon, Loader } from 'semantic-ui-react';
 import ChangeAmountForm, { ChangeAmountFormValues } from './ChangeAmountForm';
 import { getAccount } from '@/api/accounts';
 import assertIsNumber from '@/helpers/assertIsNumber';
 import assertIsDate from '@/helpers/assertIsDate';
-import { Button } from '@/components/ui';
+import { Button, Modal } from '@/components/ui';
 
 interface ModalChangeAmountProps {
   accountId: number;
@@ -60,7 +60,8 @@ const ModalChangeAmount: FC<ModalChangeAmountProps> = ({ accountId }) => {
     <Modal
       onClose={handleClose}
       onOpen={handleOpen}
-      open={open}
+      opened={open}
+      title={TRANSFER_MODAL_TITLE}
       trigger={
         <Button basic>
           <Icon name="balance scale" />
@@ -68,18 +69,16 @@ const ModalChangeAmount: FC<ModalChangeAmountProps> = ({ accountId }) => {
         </Button>
       }
     >
-      <Modal.Header>{TRANSFER_MODAL_TITLE}</Modal.Header>
-      <Modal.Content>
-        {isAccountLoading ? (
-          <Loader active />
-        ) : (
-          <ChangeAmountForm
-            id={formId}
-            initialValues={getInitialValues(account?.balance || 0)}
-            onSubmit={handleSubmit}
-          />
-        )}
-      </Modal.Content>
+      {isAccountLoading ? (
+        <Loader active />
+      ) : (
+        <ChangeAmountForm
+          id={formId}
+          initialValues={getInitialValues(account?.balance || 0)}
+          onSubmit={handleSubmit}
+        />
+      )}
+
       <Modal.Actions>
         <Button basic onClick={handleClose}>
           Отмена

@@ -1,6 +1,6 @@
+import { Button, Modal } from '@/components/ui';
 import { FC } from 'react';
-import { Icon, Modal } from 'semantic-ui-react';
-import { Button } from '@/components/ui';
+import { Icon } from 'semantic-ui-react';
 
 interface CommonModalDeleteProps {
   onDelete: () => void;
@@ -34,15 +34,11 @@ const CommonModalDelete: FC<CommonModalDeleteProps> = ({
     <Modal
       onClose={handleClose}
       onOpen={handleOpen}
-      open={open}
+      opened={open}
       trigger={<Icon link name="trash" />}
+      title="Удаление записи"
     >
-      <Modal.Header>Удаление записи</Modal.Header>
-      <Modal.Content>
-        <Modal.Description>
-          <p>Вы действительно хотите удалить запись "{name}"?</p>
-        </Modal.Description>
-      </Modal.Content>
+      <p>Вы действительно хотите удалить запись "{name}"?</p>
       <Modal.Actions>
         <Button onClick={handleClose} basic>
           Отмена

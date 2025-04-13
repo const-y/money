@@ -3,14 +3,15 @@ import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Icon } from 'semantic-ui-react';
 
-import { Account, updateAccount } from '@/api/accounts';
-import queries from '@/constants/queries';
+import { updateAccount } from '@/api/accounts';
 import FormModal from '@/components/FormModal';
+import queries from '@/constants/queries';
 import { useModalState } from '@/context/ModalState';
 import assertIsNumber from '@/helpers/assertIsNumber';
 
-import AccountForm, { AccountFormValues } from './AccountForm';
 import { MODAL_EDIT_ACCOUNT } from '@/constants/modalIds';
+import AccountForm, { AccountFormValues } from './AccountForm';
+import Account from '@/models/Account';
 
 interface ModalEditProps {
   account: Account;

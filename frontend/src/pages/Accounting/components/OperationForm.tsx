@@ -3,7 +3,7 @@ import Datepicker from '@/components/Datepicker';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';

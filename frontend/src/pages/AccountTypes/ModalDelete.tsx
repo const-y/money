@@ -4,7 +4,6 @@ import queries from '@/constants/queries';
 import { FC, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Modal } from 'semantic-ui-react';
 
 interface ModalDeleteProps {
   id: number;
