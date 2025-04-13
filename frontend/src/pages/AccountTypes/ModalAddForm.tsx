@@ -5,9 +5,10 @@ import { useModalState } from '@/context/ModalState';
 import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import AccountTypeForm, { AccountTypeFormValues } from './AccountTypeForm';
 import { MODAL_ADD_ACCOUNT_TYPE } from '@/constants/modalIds';
+import { Button } from '@/components/ui';
 
 const INITIAL_VALUES = { title: '' };
 

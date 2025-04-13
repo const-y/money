@@ -7,9 +7,10 @@ import assertIsNumber from '@/helpers/assertIsNumber';
 import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import AccountForm, { AccountFormValues } from './AccountForm';
 import { CreateAccount } from '@/models/CreateAccount';
+import { Button } from '@/components/ui';
 
 const INITIAL_VALUES: AccountFormValues = {
   name: '',

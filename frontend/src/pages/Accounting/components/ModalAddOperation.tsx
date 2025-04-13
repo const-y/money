@@ -6,9 +6,10 @@ import { useModalState } from '@/context/ModalState';
 import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import OperationForm, { OperationFormValues } from './OperationForm';
 import getAddOperationData from '../helpers/getAddOperationData';
+import { Button } from '@/components/ui';
 
 interface ModalAddOperationProps {
   accountId: number;

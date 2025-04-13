@@ -3,11 +3,12 @@ import queries from '@/constants/queries';
 import { FC, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon, Loader, Modal } from 'semantic-ui-react';
+import { Icon, Loader, Modal } from 'semantic-ui-react';
 import ChangeAmountForm, { ChangeAmountFormValues } from './ChangeAmountForm';
 import { getAccount } from '@/api/accounts';
 import assertIsNumber from '@/helpers/assertIsNumber';
 import assertIsDate from '@/helpers/assertIsDate';
+import { Button } from '@/components/ui';
 
 interface ModalChangeAmountProps {
   accountId: number;

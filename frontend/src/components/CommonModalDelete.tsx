@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { Button, Icon, Modal } from 'semantic-ui-react';
+import { Icon, Modal } from 'semantic-ui-react';
+import { Button } from '@/components/ui';
 
 interface CommonModalDeleteProps {
   onDelete: () => void;

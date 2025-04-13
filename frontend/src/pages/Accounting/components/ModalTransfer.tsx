@@ -8,8 +8,9 @@ import assertIsNumber from '@/helpers/assertIsNumber';
 import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import TransferForm, { TransferFormValues } from './ TransferForm';
+import { Button } from '@/components/ui';
 
 interface ModalTransferProps {
   sourceAccountId: number;

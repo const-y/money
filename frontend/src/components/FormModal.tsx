@@ -2,7 +2,8 @@ import { FormIdProvider } from '@/context/FormId';
 import { useModalState } from '@/context/ModalState';
 import generateId from '@/helpers/generateId';
 import { FC, ReactNode } from 'react';
-import { Button, Modal } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
+import { Button } from '@/components/ui';
 
 interface FormModalProps {
   children: ReactNode;
@@ -34,7 +35,7 @@ const FormModal: FC<FormModalProps> = ({
         <FormIdProvider formId={formId}>{children}</FormIdProvider>
       </Modal.Content>
       <Modal.Actions>
-        <Button basic onClick={close}>
+        <Button onClick={close} basic>
           {cancelButtonLabel}
         </Button>
         <Button type="submit" positive form={formId} loading={submitting}>
