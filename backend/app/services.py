@@ -22,7 +22,7 @@ class ReportService():
             ON at2.id = ao.transaction_id
             WHERE 
                 ac.is_expense = TRUE 
-                AND STRFTIME("%%Y-%%m", at2.date) = %s
+                AND TO_CHAR(at2.date, 'YYYY-MM') = %s
                 AND ao.account_id IN (SELECT id FROM app_account aa WHERE aa.currency = %s)
             GROUP BY ac.id
         """
