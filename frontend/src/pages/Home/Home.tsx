@@ -1,5 +1,5 @@
 import settingKeys from '@/constants/settingKeys';
-import useSettings from '@/hooks/useSettings';
+import useSettings from '@/hooks/useSettingsQuery';
 import { Badge } from '@mantine/core';
 import { FC } from 'react';
 import { Header, Segment } from 'semantic-ui-react';

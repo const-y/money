@@ -2,7 +2,7 @@ import { getCapital } from '@/api/capital';
 import queries from '@/constants/queries';
 import settingKeys from '@/constants/settingKeys';
 import formatCurrency from '@/helpers/formatCurrency';
-import useSettings from '@/hooks/useSettings';
+import useSettings from '@/hooks/useSettingsQuery';
 import { useQuery } from 'react-query';
 import { Loader, Statistic } from 'semantic-ui-react';
 

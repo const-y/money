@@ -26,7 +26,9 @@ const initialValues: OperationFormValues = {
 
 const ModalAddOperation: FC<ModalAddOperationProps> = ({ accountId }) => {
   const { close } = useModalState(MODAL_ADD_OPERATION);
+
   const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(createOperation, {
     onSuccess: () => {
       toast.success(`Операция успешно добавлена`);

@@ -1,11 +1,13 @@
-import { FC } from 'react';
-import { useQuery } from 'react-query';
-import { Header, Loader } from 'semantic-ui-react';
-
 import { ExchangeRate, getExchangeRateList } from '@/api/exchangeRates';
 import AppTable, { Column } from '@/components/AppTable';
+import { EmptyState, PageTitle } from '@/components/ui';
+import { MODAL_ADD_EXCHANGE_RATE } from '@/constants/modalIds';
 import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
 import formatDate from '@/helpers/formatDate';
+import { FC } from 'react';
+import { useQuery } from 'react-query';
+import { Loader } from 'semantic-ui-react';
 import { ExchangeRateFormValues } from './ExhangeRateForm';
 import ModalAddForm from './ModalAddForm';
 import ModalDelete from './ModalDelete';
@@ -17,7 +19,9 @@ const ExchangeRates: FC = () => {
     getExchangeRateList
   );
 
-  if (isLoading) {
+  const { open } = useModalState(MODAL_ADD_EXCHANGE_RATE);
+
+  if (isLoading || !data) {
     return <Loader />;
   }
 
@@ -48,9 +52,17 @@ const ExchangeRates: FC = () => {
 
   return (
     <>
-      <Header as="h1">Курсы валют</Header>
-      <ModalAddForm />
-      {data && <AppTable columns={columns} data={data} />}
+      <PageTitle rightSlot={<ModalAddForm />}>Курсы валют</PageTitle>
+      {data.length === 0 ? (
+        <EmptyState
+          title="Еще не создано ни одного курса валюты"
+          description="Курсы валют это информация о текущих курсах валют относительно базовой валюты"
+          actionLabel="Добавить курс валюты"
+          onActionClick={open}
+        />
+      ) : (
+        <AppTable columns={columns} data={data} />
+      )}
     </>
   );
 };

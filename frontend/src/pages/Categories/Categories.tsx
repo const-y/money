@@ -8,12 +8,15 @@ import queries from '@/constants/queries';
 import ModalAddForm from './ModalAddForm';
 import ModalDelete from './ModalDelete';
 import ModalEdit from './ModalEdit';
-import ColorLegend from './ColorLegend';
+import { EmptyState, PageTitle } from '@/components/ui';
+import { useModalState } from '@/context/ModalState';
+import { MODAL_ADD_CATEGORY } from '@/constants/modalIds';
 
 const Categories: FC = () => {
   const { data, isLoading } = useQuery(queries.CATEGORIES, getCategoryList);
+  const { open } = useModalState(MODAL_ADD_CATEGORY);
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <Loader />;
   }
 
@@ -38,18 +41,15 @@ const Categories: FC = () => {
 
   return (
     <>
-      <Header as="h1">Категории</Header>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-        }}
-      >
-        <ModalAddForm />
-        <ColorLegend />
-      </div>
-      {data && (
+      <PageTitle rightSlot={<ModalAddForm />}>Категории</PageTitle>
+      {data.length === 0 ? (
+        <EmptyState
+          title="Еще не создано ни одной категории"
+          description="Категории необходимы для учетов доходов и расходов"
+          actionLabel="Добавить категорию"
+          onActionClick={open}
+        />
+      ) : (
         <AppTable columns={columns} data={data} getRowOptions={getRowOptions} />
       )}
     </>
