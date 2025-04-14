@@ -4,7 +4,7 @@ up:
 	docker-compose up --build -d
 
 down:
-	docker-compose down --remove-orphans
+	docker-compose down --remove-orphans -v
 
 migrations:
 	docker-compose exec backend python manage.py makemigrations
