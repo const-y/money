@@ -21,7 +21,7 @@ jobs:
           echo "DB_NAME=test_money" >> ./backend/.env
           echo "DB_USER=test_moneyuser" >> ./backend/.env
           echo "DB_PASSWORD=test_m0neypa$$" >> ./backend/.env
-          echo "DB_HOST=test_db" >> ./backend/.env
+          echo "DB_HOST=db" >> ./backend/.env
           echo "DB_PORT=5432" >> ./backend/.env
 
       - name: Install Docker Compose
