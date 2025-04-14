@@ -30,5 +30,8 @@ logs:
 wait-for-db:
 	docker-compose exec backend sh -c 'until nc -z db 5432; do echo "Waiting for db..."; sleep 1; done'
 
+test:
+	docker-compose exec backend python manage.py test
+
 
 setup: up wait-for-db migrate load-data logs

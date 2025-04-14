@@ -1,31 +1,17 @@
-name: Run tests
+name: Django Docker Tests
 
 on:
   push:
-    branches-ignore:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  tests:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install venv
-        run: |
-          make install_venv
-
-      - name: Install dependencies
-        run: |
-          make bootstrap
-
-      - name: Run tests
-        run: |
-          make test
+      - name: Run setup and tests
+        run: make setup test

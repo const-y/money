@@ -1,5 +1,5 @@
 from rest_framework.test import APITestCase
-from rest_framework.serializers import OrderedDict
+from collections import OrderedDict
 
 from app.models import Transaction, Category, Operation, AccountType, Account
 from app.serializers import ExpensesByCurrenciesReportSerializer, ExpensesByCurrenciesDetailsReportSerializer
