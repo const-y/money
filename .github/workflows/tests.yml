@@ -18,11 +18,11 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DB_NAME=test_money" >> /.env
-          echo "DB_USER=test_moneyuser" >> /.env
-          echo "DB_PASSWORD=test_temp_moneypass" >> /.env
-          echo "DB_HOST=db" >> /.env
-          echo "DB_PORT=5432" >> /.env
+          echo "DB_NAME=test_money" >> .env
+          echo "DB_USER=test_moneyuser" >> .env
+          echo "DB_PASSWORD=test_temp_moneypass" >> .env
+          echo "DB_HOST=db" >> .env
+          echo "DB_PORT=5432" >> .env
 
       - name: Install Docker Compose
         run: |
