@@ -33,5 +33,11 @@ wait-for-db:
 test:
 	docker-compose exec -T backend python manage.py test
 
+coverage:
+	docker-compose exec -T backend coverage run manage.py test
+
+coverage-xml: coverage
+	docker-compose exec -T backend coverage xml
+
 
 setup: up wait-for-db migrate load-data
