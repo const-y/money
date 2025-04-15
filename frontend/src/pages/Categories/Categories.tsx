@@ -1,57 +1,39 @@
+import { Category, getCategoryList } from '@/api/categories';
+import AppTable from '@/components/AppTable';
+import { EmptyState, PageTitle } from '@/components/ui';
+import { MODAL_ADD_CATEGORY } from '@/constants/modalIds';
+import queries from '@/constants/queries';
+import { useModalState } from '@/context/ModalState';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
-import { Header, Loader } from 'semantic-ui-react';
-
-import { Category, getCategoryList } from '@/api/categories';
-import AppTable, { Column } from '@/components/AppTable';
-import queries from '@/constants/queries';
+import { Loader } from 'semantic-ui-react';
+import categoriesColumns from './categoriesColumns';
 import ModalAddForm from './ModalAddForm';
-import ModalDelete from './ModalDelete';
-import ModalEdit from './ModalEdit';
-import ColorLegend from './ColorLegend';
 
 const Categories: FC = () => {
   const { data, isLoading } = useQuery(queries.CATEGORIES, getCategoryList);
+  const { open } = useModalState(MODAL_ADD_CATEGORY);
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <Loader />;
   }
 
-  const columns: Column<Category>[] = [
-    {
-      key: 'actions',
-      title: '',
-      renderCell: (row) => (
-        <div>
-          <ModalDelete id={row.id} title={row.name} />
-          <ModalEdit categoryId={row.id} initialValues={row} />
-        </div>
-      ),
-      collapsing: true,
-    },
-    {
-      key: 'name',
-      title: 'Название',
-      renderCell: ({ name }) => name,
-    },
-  ];
-
   return (
     <>
-      <Header as="h1">Категории</Header>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-        }}
-      >
-        <ModalAddForm />
-        <ColorLegend />
-      </div>
-      {data && (
-        <AppTable columns={columns} data={data} getRowOptions={getRowOptions} />
-      )}
+      <PageTitle rightSlot={<ModalAddForm />}>Категории</PageTitle>
+      <AppTable
+        columns={categoriesColumns}
+        data={data}
+        getRowOptions={getRowOptions}
+        renderEmptyState={() => (
+          <EmptyState
+            title="Еще не создано ни одной категории"
+            description="Категории необходимы для учетов доходов и расходов"
+            actionLabel="Добавить категорию"
+            onActionClick={open}
+          />
+        )}
+      />
     </>
   );
 };

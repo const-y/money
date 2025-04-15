@@ -1,27 +1,23 @@
-import { getAccounts } from '@/api/accounts';
-import queries from '@/constants/queries';
 import formatCurrency from '@/helpers/formatCurrency';
-import { FC } from 'react';
-import { useQuery } from 'react-query';
-import { Header, Label, Loader, Menu, MenuItemProps } from 'semantic-ui-react';
+import useAccountsQuery from '@/hooks/useAccountsQuery';
+import { FC, MouseEvent } from 'react';
+import { Label, Loader, Menu, MenuItemProps } from 'semantic-ui-react';
+import { useActiveAccount } from '../ActiveAccountContext';
 
-interface AccountsMenuProps {
-  activeAccountId: number;
-  onItemClick: (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    data: MenuItemProps
-  ) => void;
-}
-
-const AccountsMenu: FC<AccountsMenuProps> = ({
-  activeAccountId,
-  onItemClick,
-}) => {
-  const { data, isLoading } = useQuery(queries.ACCOUNTS, getAccounts);
+const AccountsMenu: FC = () => {
+  const { data, isLoading } = useAccountsQuery();
+  const { activeAccountId, setActiveAccountId } = useActiveAccount();
 
   if (isLoading || !data) {
     return <Loader active />;
   }
+
+  const handleItemClick = (
+    _event: MouseEvent<HTMLAnchorElement>,
+    { index }: MenuItemProps
+  ) => {
+    if (typeof index === 'number') setActiveAccountId(index);
+  };
 
   return (
     <Menu fluid vertical tabular>
@@ -32,7 +28,7 @@ const AccountsMenu: FC<AccountsMenuProps> = ({
             key={id}
             index={id}
             active={isActive}
-            onClick={onItemClick}
+            onClick={handleItemClick}
           >
             <Label color={isActive ? 'teal' : undefined}>
               {formatCurrency(balance, currency)}

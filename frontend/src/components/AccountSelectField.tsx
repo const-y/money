@@ -1,9 +1,7 @@
-import { getAccounts } from '@/api/accounts';
-import queries from '@/constants/queries';
 import assertIsNumber from '@/helpers/assertIsNumber';
 import getDropdownOptions from '@/helpers/getDropdownOptions';
+import useAccountsQuery from '@/hooks/useAccountsQuery';
 import { FC, useMemo } from 'react';
-import { useQuery } from 'react-query';
 import { DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react';
 
 interface AccountSelectFieldProps {
@@ -21,7 +19,7 @@ const AccountSelectField: FC<AccountSelectFieldProps> = ({
   placeholder,
   onChange,
 }) => {
-  const { data, isLoading } = useQuery(queries.ACCOUNTS, getAccounts);
+  const { data, isLoading } = useAccountsQuery();
 
   const options: DropdownItemProps[] = useMemo(
     () => getDropdownOptions(data, (account) => account.name),
