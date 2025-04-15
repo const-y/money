@@ -1,25 +1,20 @@
 import { ExchangeRate } from '@/api/exchangeRates';
-import { Column } from '@/components/AppTable';
+import { Column, createActionColumn } from '@/components/AppTable';
 import formatDate from '@/helpers/formatDate';
 import { ExchangeRateFormValues } from './ExhangeRateForm';
 import ModalDelete from './ModalDelete';
 import ModalEdit from './ModalEdit';
 
 const exchangeRatesColumns: Column<ExchangeRate>[] = [
-  {
-    key: 'actions',
-    title: '',
-    renderCell: (row) => (
-      <div>
-        <ModalDelete id={row.id} title={row.currency} />
-        <ModalEdit
-          exchangeRateId={row.id}
-          initialValues={getInitialValues(row)}
-        />
-      </div>
-    ),
-    collapsing: true,
-  },
+  createActionColumn((row) => (
+    <div>
+      <ModalDelete id={row.id} title={row.currency} />
+      <ModalEdit
+        exchangeRateId={row.id}
+        initialValues={getInitialValues(row)}
+      />
+    </div>
+  )),
   { key: 'date', title: 'Дата', renderCell: (row) => formatDate(row.date) },
   { key: 'currency', title: 'Валюта', renderCell: (row) => row.currency },
   {

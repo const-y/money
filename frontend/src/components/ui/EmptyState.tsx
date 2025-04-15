@@ -15,7 +15,7 @@ const EmptyState = ({
   onActionClick,
 }: EmptyTableStateProps) => {
   return (
-    <Center h="100%">
+    <Center h="100%" p="xl">
       <Stack gap="sm" align="center">
         <IconInbox size={48} stroke={1.5} color="gray" />
         <Text size="lg" fw={500}>

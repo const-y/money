@@ -1,49 +1,21 @@
-import { getOperationList } from '@/api/operations';
-import formatDate from '@/helpers/formatDate';
+import AppTable from '@/components/AppTable';
+import useOperationsQuery from '@/hooks/useOperationsQuery';
 import { FC } from 'react';
-import { useQuery } from 'react-query';
-import { Loader, Table } from 'semantic-ui-react';
-import AccountCurrencyAmount from './AccountCurrencyAmount';
-import queries from '@/constants/queries';
+import { Loader } from 'semantic-ui-react';
+import operationsTableColumns from './operationsTableColumns';
 
 interface OperationsTableProps {
   accountId: number;
 }
 
 const OperationsTable: FC<OperationsTableProps> = ({ accountId }) => {
-  const { data, isLoading } = useQuery(
-    [queries.ACCOUNTS, accountId, queries.OPERATIONS],
-    () => getOperationList({ account: accountId })
-  );
+  const { data, isLoading } = useOperationsQuery(accountId);
 
   if (isLoading || !data) {
     return <Loader active />;
   }
 
-  return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Дата</Table.HeaderCell>
-          <Table.HeaderCell>Описание</Table.HeaderCell>
-          <Table.HeaderCell>Сумма</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {data?.map((operation) => (
-          <Table.Row key={operation.id}>
-            <Table.Cell>{formatDate(operation.date)}</Table.Cell>
-            <Table.Cell>{operation.description}</Table.Cell>
-            <Table.Cell>
-              <AccountCurrencyAmount accountId={accountId}>
-                {operation.amount}
-              </AccountCurrencyAmount>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
-  );
+  return <AppTable columns={operationsTableColumns} data={data} />;
 };
 
 export default OperationsTable;

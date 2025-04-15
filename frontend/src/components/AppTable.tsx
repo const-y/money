@@ -57,3 +57,14 @@ export default function AppTable<T extends Entity>({
     </Table>
   );
 }
+
+export function createActionColumn<T>(
+  renderCell: (row: T) => ReactNode
+): Column<T> {
+  return {
+    key: 'actions',
+    title: '',
+    renderCell,
+    collapsing: true,
+  };
+}
