@@ -44,5 +44,5 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          ./cc-test-reporter format-coverage coverage.xml -t coverage.py --prefix /app 
+          ./cc-test-reporter format-coverage ./backend/coverage.xml -t coverage.py 
           ./cc-test-reporter upload-coverage
