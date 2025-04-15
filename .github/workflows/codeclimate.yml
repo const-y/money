@@ -10,18 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install dependencies
-        run: |
-          pip install -r backend/requirements.txt
-          pip install coverage
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
 
       - name: Create .env file
         run: |
@@ -31,10 +23,15 @@ jobs:
           echo "DB_HOST=db" >> .env
           echo "DB_PORT=5432" >> .env
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: Run tests and generate coverage report
         run: |
-          coverage run backend/manage.py test backend
-          coverage xml
+          docker-compose exec -T backend coverage run backend/manage.py test backend
+          docker-compose exec -T backend coverage xml
 
       - name: Upload test coverage to CodeClimate
         env:
