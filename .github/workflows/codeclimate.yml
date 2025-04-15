@@ -36,6 +36,9 @@ jobs:
       - name: Generate coverage XML
         run: make coverage-xml
 
+      - name: Copy coverage XML to host
+        run: docker cp $(docker-compose ps -q backend):/app/coverage.xml coverage.xml
+
       - name: Upload test coverage to CodeClimate
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
