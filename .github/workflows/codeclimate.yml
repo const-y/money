@@ -28,10 +28,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Run tests and generate coverage report
-        run: |
-          docker-compose exec -T backend coverage run backend/manage.py test backend
-          docker-compose exec -T backend coverage xml
+      - name: Run setup
+        run: make setup
+
+      - name: Run tests with coverage
+        run: docker-compose exec -T backend coverage run backend/manage.py test backend
+
+      - name: Generate coverage XML
+        run: docker-compose exec -T backend coverage xml
 
       - name: Upload test coverage to CodeClimate
         env:
