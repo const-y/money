@@ -34,4 +34,4 @@ test:
 	docker-compose exec -T backend python manage.py test
 
 
-setup: up wait-for-db migrate load-data logs
+setup: up wait-for-db migrate load-data
