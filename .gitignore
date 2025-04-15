@@ -1,7 +1,5 @@
 env/
 **/__pycache__/
-money.sqlite
-*.sqlite
 # Logs
 logs
 *.log

@@ -4,16 +4,16 @@ up:
 	docker-compose up --build -d
 
 down:
-	docker-compose down --remove-orphans
+	docker-compose down --remove-orphans -v
 
 migrations:
 	docker-compose exec backend python manage.py makemigrations
 
 migrate:
-	docker-compose exec backend python manage.py migrate
+	docker-compose exec -T backend python manage.py migrate
 
 load-data:
-	docker-compose exec backend python manage.py loaddata ./fixtures/data.json
+	docker-compose exec -T backend python manage.py loaddata ./fixtures/data.json
 	
 superuser:
 	docker-compose exec backend python manage.py createsuperuser
@@ -28,10 +28,10 @@ logs:
 	docker-compose logs -f
 
 wait-for-db:
-	docker-compose exec backend sh -c 'until nc -z db 5432; do echo "Waiting for db..."; sleep 1; done'
+	docker-compose exec -T backend sh -c 'until nc -z db 5432; do echo "Waiting for db..."; sleep 1; done'
 
 test:
-	docker-compose exec backend python manage.py test
+	docker-compose exec -T backend python manage.py test
 
 
-setup: up wait-for-db migrate load-data logs
+setup: up wait-for-db migrate load-data
