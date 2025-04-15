@@ -1,13 +1,11 @@
-import { getAccounts } from '@/api/accounts';
 import AppTable, { Column } from '@/components/AppTable';
 import { EmptyState, PageTitle } from '@/components/ui';
 import { MODAL_ADD_ACCOUNT } from '@/constants/modalIds';
-import queries from '@/constants/queries';
 import { useModalState } from '@/context/ModalState';
 import formatCurrency from '@/helpers/formatCurrency';
+import useAccountsQuery from '@/hooks/useAccountsQuery';
 import Account from '@/models/Account';
 import { FC } from 'react';
-import { useQuery } from 'react-query';
 import { Loader } from 'semantic-ui-react';
 import AccountTypeCell from './AccountTypeCell';
 import ModalAddForm from './ModalAddForm';
@@ -15,7 +13,7 @@ import ModalDeleteAccount from './ModalDeleteAccount';
 import ModalEdit from './ModalEdit';
 
 const Accounts: FC = () => {
-  const { data, isLoading } = useQuery(queries.ACCOUNTS, getAccounts);
+  const { data, isLoading } = useAccountsQuery();
   const { open } = useModalState(MODAL_ADD_ACCOUNT);
 
   if (isLoading || !data) {

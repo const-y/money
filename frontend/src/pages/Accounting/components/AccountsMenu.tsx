@@ -1,13 +1,11 @@
-import { getAccounts } from '@/api/accounts';
-import queries from '@/constants/queries';
 import formatCurrency from '@/helpers/formatCurrency';
+import useAccountsQuery from '@/hooks/useAccountsQuery';
 import { FC, MouseEvent } from 'react';
-import { useQuery } from 'react-query';
 import { Label, Loader, Menu, MenuItemProps } from 'semantic-ui-react';
 import { useActiveAccount } from '../ActiveAccountContext';
 
 const AccountsMenu: FC = () => {
-  const { data, isLoading } = useQuery(queries.ACCOUNTS, getAccounts);
+  const { data, isLoading } = useAccountsQuery();
   const { activeAccountId, setActiveAccountId } = useActiveAccount();
 
   if (isLoading || !data) {
