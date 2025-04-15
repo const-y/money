@@ -1,5 +1,5 @@
-import { AccountType, getAccountTypes } from '@/api/accountTypes';
-import AppTable, { Column } from '@/components/AppTable';
+import { getAccountTypes } from '@/api/accountTypes';
+import AppTable from '@/components/AppTable';
 import { EmptyState, PageTitle } from '@/components/ui';
 import { MODAL_ADD_ACCOUNT_TYPE } from '@/constants/modalIds';
 import queries from '@/constants/queries';
@@ -8,8 +8,7 @@ import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { Loader } from 'semantic-ui-react';
 import ModalAddForm from './ModalAddForm';
-import ModalDelete from './ModalDelete';
-import ModalEdit from './ModalEdit';
+import accountTypesColumns from './accountTypesColums';
 
 const AccountTypes: FC = () => {
   const { data, isLoading } = useQuery(queries.ACCOUNT_TYPES, getAccountTypes);
@@ -19,34 +18,21 @@ const AccountTypes: FC = () => {
     return <Loader />;
   }
 
-  const columns: Column<AccountType>[] = [
-    {
-      key: 'actions',
-      title: '',
-      renderCell: (row) => (
-        <div>
-          <ModalDelete id={row.id} title={row.title} />
-          <ModalEdit initialValues={row} />
-        </div>
-      ),
-      collapsing: true,
-    },
-    { key: 'title', title: 'Заголовок', renderCell: (row) => row.title },
-  ];
-
   return (
     <>
       <PageTitle rightSlot={<ModalAddForm />}>Типы счетов</PageTitle>
-      {data?.length === 0 ? (
-        <EmptyState
-          title="Еще не создано ни одного типа счета"
-          description="Типы счетов необходимы для создания счетов"
-          actionLabel="Создать тип счета"
-          onActionClick={open}
-        />
-      ) : (
-        <AppTable columns={columns} data={data} />
-      )}
+      <AppTable
+        columns={accountTypesColumns}
+        data={data}
+        renderEmptyState={() => (
+          <EmptyState
+            title="Еще не создано ни одного типа счета"
+            description="Типы счетов необходимы для создания счетов"
+            actionLabel="Создать тип счета"
+            onActionClick={open}
+          />
+        )}
+      />
     </>
   );
 };
