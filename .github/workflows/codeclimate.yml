@@ -15,7 +15,7 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Create .env file
+      - name: Create .env files
         run: |
           echo "POSTGRES_DB=test_money" >> .env
           echo "POSTGRES_USER=test_moneyuser" >> .env
@@ -28,17 +28,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Run tests and generate coverage report
-        run: |
-          docker-compose exec -T backend coverage run backend/manage.py test backend
-          docker-compose exec -T backend coverage xml
+      - name: Run setup
+        run: make setup
 
-      - name: Upload test coverage to CodeClimate
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      - name: Generate coverage XML
+        run: make coverage-xml
+
+      - name: Upload backend test coverage to CodeClimate
         run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./backend/cc-test-reporter
+          chmod +x ./backend/cc-test-reporter
+          cd ./backend
           ./cc-test-reporter before-build
-          ./cc-test-reporter format-coverage coverage.xml -t coverage.py
-          ./cc-test-reporter upload-coverage
+          ./cc-test-reporter format-coverage -t coverage.py coverage.xml 
+          ./cc-test-reporter upload-coverage --id ${{ secrets.TEST_REPORTER_ID }}
