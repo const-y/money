@@ -6,3 +6,4 @@ djangorestframework-camel-case
 coverage
 psycopg2-binary
 python-dotenv
+pytest
