@@ -40,8 +40,7 @@ jobs:
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./backend/cc-test-reporter
           chmod +x ./backend/cc-test-reporter
-          cd ./backend && \
-          CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} \
-          ./cc-test-reporter before-build && \
-          ./cc-test-reporter format-coverage -t coverage.py coverage.xml && \
-          ./cc-test-reporter upload-coverage
+          cd ./backend
+          ./cc-test-reporter before-build
+          ./cc-test-reporter format-coverage -t coverage.py coverage.xml 
+          ./cc-test-reporter upload-coverage -r ${{ secrets.CC_TEST_REPORTER_ID }}
