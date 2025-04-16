@@ -9,35 +9,17 @@ import {
   Notification,
   Center,
 } from '@/components/ui';
+import useLoginMutation from '@/hooks/useLoginMutation';
 
 const Login: FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async () => {
-    try {
-      const res = await fetch('/api/auth/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // важно: для куки
-        body: JSON.stringify({ username, password }),
-      });
+  const { mutate, isLoading, isError, error } = useLoginMutation();
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.detail || 'Ошибка авторизации');
-      }
-
-      setAccessToken(data.access_token);
-      setError(null);
-    } catch (err: any) {
-      setError(err.message || 'Неизвестная ошибка');
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate({ username, password });
   };
 
   return (
@@ -62,19 +44,14 @@ const Login: FC = () => {
             onChange={(e) => setPassword(e.currentTarget.value)}
             required
           />
-          <Button onClick={handleLogin} fullWidth>
+          <Button onClick={handleSubmit} fullWidth loading={isLoading}>
             Войти
           </Button>
         </Stack>
 
-        {error && (
+        {isError && (
           <Notification color="red" mt="md">
-            {error}
-          </Notification>
-        )}
-        {accessToken && (
-          <Notification color="teal" mt="md">
-            Успешно! Токен: {accessToken.slice(0, 16)}...
+            {(error as any)?.message || 'Ошибка авторизации'}
           </Notification>
         )}
       </Paper>
