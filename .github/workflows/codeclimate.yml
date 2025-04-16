@@ -44,4 +44,4 @@ jobs:
           cd ./backend
           ./cc-test-reporter before-build
           ./cc-test-reporter format-coverage -t coverage.py coverage.xml 
-          ./cc-test-reporter upload-coverage
+          ./cc-test-reporter -r ${{ secrets.CC_TEST_REPORTER_ID }} upload-coverage
