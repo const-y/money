@@ -38,7 +38,5 @@ coverage:
 
 coverage-xml: coverage
 	docker-compose exec -T backend coverage xml
-	docker cp $$(docker-compose ps -q backend):/app/coverage.xml ./backend/coverage.xml
-
 
 setup: up wait-for-db migrate load-data

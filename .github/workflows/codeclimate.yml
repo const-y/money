@@ -36,12 +36,13 @@ jobs:
       - name: Generate coverage XML
         run: make coverage-xml
 
-      - name: Upload test coverage to CodeClimate
+      - name: Upload backend test coverage to CodeClimate
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./backend/cc-test-reporter
+          chmod +x ./backend/cc-test-reporter
+          cd ./backend
           ./cc-test-reporter before-build
-          ./cc-test-reporter format-coverage -t coverage.py ./backend/coverage.xml --prefix backend
+          ./cc-test-reporter format-coverage -t coverage.py coverage.xml 
           ./cc-test-reporter upload-coverage
