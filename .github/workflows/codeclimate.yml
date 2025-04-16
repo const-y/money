@@ -24,7 +24,6 @@ jobs:
           echo "POSTGRES_PASSWORD=test_temp_moneypass" >> .env
           echo "DB_HOST=db" >> .env
           echo "DB_PORT=5432" >> .env
-          echo "CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }}" >> backend/.env
 
       - name: Install Docker Compose
         run: |
