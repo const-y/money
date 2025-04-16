@@ -34,7 +34,7 @@ test:
 	docker-compose exec -T backend python manage.py test
 
 coverage:
-	docker-compose exec -T backend coverage run manage.py test
+	docker-compose exec -T backend coverage run --branch --omit="*/tests/*" manage.py test
 
 coverage-xml: coverage
 	docker-compose exec -T backend coverage xml
