@@ -12,4 +12,8 @@ export {
   Notification,
   Center,
   Group,
+  Avatar,
+  Menu,
+  Text,
+  UnstyledButton,
 } from '@mantine/core';

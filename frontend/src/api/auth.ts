@@ -15,3 +15,5 @@ export const getToken = () =>
   api
     .get<{ accessToken: string }>('/auth/token/', { withCredentials: true })
     .then((result) => result.data);
+
+export const getMe = () => api.get('/auth/me/').then((result) => result.data);

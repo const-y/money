@@ -22,6 +22,7 @@ import Home from './pages/Home';
 import IncomeExpenses from './pages/IncomeExpenses';
 import Planning from './pages/Planning';
 import Login from './pages/Login';
+import { AuthProvider } from './context/Auth';
 
 const router = createBrowserRouter([
   {
@@ -56,13 +57,15 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ModalStateProvider>
-        <MantineProvider>
-          <RouterProvider router={router} />
-        </MantineProvider>
-      </ModalStateProvider>
-    </QueryClientProvider>
-    <ToastContainer />
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <ModalStateProvider>
+          <MantineProvider>
+            <RouterProvider router={router} />
+          </MantineProvider>
+        </ModalStateProvider>
+      </QueryClientProvider>
+      <ToastContainer />
+    </AuthProvider>
   </React.StrictMode>
 );

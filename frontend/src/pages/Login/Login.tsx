@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   Button,
   TextInput,
@@ -10,17 +10,32 @@ import {
   Center,
 } from '@/components/ui';
 import useLoginMutation from '@/hooks/useLoginMutation';
+import { useAuthContext } from '@/context/Auth';
+import { useNavigate } from 'react-router-dom';
+import routes from '@/constants/routes';
 
 const Login: FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { isAuthenticated, login } = useAuthContext();
+  const navigate = useNavigate();
 
-  const { mutate, isLoading, isError, error } = useLoginMutation();
+  const { mutate, isLoading, isError, error } = useLoginMutation({
+    onSuccess: ({ accessToken }) => {
+      login(accessToken);
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutate({ username, password });
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(routes.HOME);
+    }
+  }, [isAuthenticated]);
 
   return (
     <Center h={'100vh'}>

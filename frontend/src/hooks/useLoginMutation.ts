@@ -1,18 +1,16 @@
 import { login } from '@/api/auth';
 import { useMutation } from 'react-query';
 
-const useLoginMutation = () => {
+interface UseLoginMutationOptions {
+  onSuccess?: ({ accessToken }: { accessToken: string }) => void;
+  onError?: () => void;
+}
+
+const useLoginMutation = (options?: UseLoginMutationOptions) => {
   return useMutation(
     (data: { username: string; password: string }) =>
       login(data.username, data.password),
-    {
-      onSuccess: (data) => {
-        console.log('Login successful, token:', data.accessToken);
-      },
-      onError: (error) => {
-        console.error('Login error:', error);
-      },
-    }
+    options
   );
 };
 
