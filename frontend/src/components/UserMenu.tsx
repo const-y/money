@@ -29,7 +29,7 @@ const UserMenu: FC = () => {
           <Group gap="xs">
             <Avatar src={avatarSrc} alt={user.username} radius="xl" />
             <div style={{ lineHeight: 1 }}>
-              <Text size="sm" fw={500}>
+              <Text size="sm" fw={500} c="white">
                 {user.username}
               </Text>
               <Text size="xs" c="dimmed">

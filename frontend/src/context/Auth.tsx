@@ -1,8 +1,11 @@
-import api from '@/api/api';
+import {
+  clearAccessToken,
+  getAccessToken,
+  setAccessToken,
+} from '@/services/tokenService';
 import { createContext, FC, useContext, useMemo, useState } from 'react';
 
 interface AuthContext {
-  accessToken: string | null;
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
@@ -17,26 +20,27 @@ const AuthContext = createContext<AuthContext | null>(null);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    () => !!getAccessToken()
+  );
 
   const login = (token: string) => {
     setAccessToken(token);
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
-    setAccessToken(null);
-    delete api.defaults.headers.common['Authorization'];
+    clearAccessToken();
+    setIsAuthenticated(false);
   };
 
   const value = useMemo(
     () => ({
-      accessToken,
-      isAuthenticated: !!accessToken,
+      isAuthenticated,
       login,
       logout,
     }),
-    [accessToken]
+    [isAuthenticated]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
