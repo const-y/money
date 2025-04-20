@@ -1,22 +1,21 @@
-import { FC, useEffect, useState } from 'react';
 import {
   Button,
-  TextInput,
-  PasswordInput,
-  Paper,
-  Title,
-  Stack,
-  Notification,
   Center,
+  Notification,
+  Paper,
+  PasswordInput,
+  Stack,
+  TextInput,
+  Title,
 } from '@/components/ui';
-import useLoginMutation from '@/hooks/useLoginMutation';
-import { useAuthContext } from '@/context/Auth';
-import { useNavigate } from 'react-router-dom';
 import routes from '@/constants/routes';
+import { useAuthContext } from '@/context/Auth';
+import useLoginMutation from '@/hooks/useLoginMutation';
+import { FC, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useLoginForm from './hooks/useLoginForm';
 
 const Login: FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const { isAuthenticated, login } = useAuthContext();
   const navigate = useNavigate();
 
@@ -26,10 +25,7 @@ const Login: FC = () => {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutate({ username, password });
-  };
+  const { getInputProps, key, onSubmit } = useLoginForm();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -45,23 +41,27 @@ const Login: FC = () => {
         </Title>
 
         <Stack>
-          <TextInput
-            label="Логин"
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.currentTarget.value)}
-            required
-          />
-          <PasswordInput
-            label="Пароль"
-            placeholder="Ваш пароль"
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-            required
-          />
-          <Button onClick={handleSubmit} fullWidth loading={isLoading}>
-            Войти
-          </Button>
+          <form onSubmit={onSubmit((values) => mutate(values))}>
+            <TextInput
+              my="sm"
+              withAsterisk
+              label="Логин"
+              placeholder="Ваш логин"
+              key={key('username')}
+              {...getInputProps('username')}
+            />
+            <PasswordInput
+              my="sm"
+              withAsterisk
+              label="Пароль"
+              placeholder="Ваш пароль"
+              key={key('password')}
+              {...getInputProps('password')}
+            />
+            <Button mt="lg" type="submit" fullWidth loading={isLoading}>
+              Войти
+            </Button>
+          </form>
         </Stack>
 
         {isError && (
