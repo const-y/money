@@ -1,6 +1,7 @@
 import { Avatar, Group, Menu, Text, UnstyledButton } from '@/components/ui';
 import routes from '@/constants/routes';
 import { useAuthContext } from '@/context/Auth';
+import useLogoutMutation from '@/hooks/useLogoutMutation';
 import useMeQuery from '@/hooks/useMeQuery';
 import { Loader } from '@mantine/core';
 import { IconChevronDown, IconLogout } from '@tabler/icons-react';
@@ -9,17 +10,24 @@ import { useNavigate } from 'react-router-dom';
 
 const UserMenu: FC = () => {
   const { logout } = useAuthContext();
+
   const { data: user, isLoading } = useMeQuery();
   const navigate = useNavigate();
   const avatarSrc = 'https://i.pravatar.cc/40';
+
+  const { mutate } = useLogoutMutation({
+    onSuccess: () => {
+      logout();
+      navigate(routes.LOGIN);
+    },
+  });
 
   if (isLoading || !user) {
     return <Loader size="xs" />;
   }
 
   const handleLogout = () => {
-    logout();
-    navigate(routes.LOGIN);
+    mutate();
   };
 
   return (

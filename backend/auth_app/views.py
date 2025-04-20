@@ -59,6 +59,17 @@ class MeView(APIView):
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
+
         if refresh_token:
             request.data['refresh'] = refresh_token
-        return super().post(request, *args, **kwargs)
+        else:
+            return Response({'detail': 'Refresh token not found in cookies'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        response = super().post(request, *args, **kwargs)
+
+        access_token = response.data.get('access')
+        new_refresh_token = response.data.get('refresh')
+
+        res = Response({'access_token': access_token}, status=status.HTTP_200_OK)
+        set_refresh_cookie(res, str(new_refresh_token))
+        return res
