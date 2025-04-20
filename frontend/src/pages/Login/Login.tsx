@@ -1,19 +1,10 @@
-import {
-  Button,
-  Center,
-  Notification,
-  Paper,
-  PasswordInput,
-  Stack,
-  TextInput,
-  Title,
-} from '@/components/ui';
+import { Center, Notification, Paper, Stack, Title } from '@/components/ui';
 import routes from '@/constants/routes';
 import { useAuthContext } from '@/context/Auth';
 import useLoginMutation from '@/hooks/useLoginMutation';
 import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useLoginForm from './hooks/useLoginForm';
+import LoginForm from './LoginForm';
 
 const Login: FC = () => {
   const { isAuthenticated, login } = useAuthContext();
@@ -24,8 +15,6 @@ const Login: FC = () => {
       login(accessToken);
     },
   });
-
-  const { getInputProps, key, onSubmit } = useLoginForm();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -40,29 +29,7 @@ const Login: FC = () => {
           Вход в систему
         </Title>
 
-        <Stack>
-          <form onSubmit={onSubmit((values) => mutate(values))}>
-            <TextInput
-              my="sm"
-              withAsterisk
-              label="Логин"
-              placeholder="Ваш логин"
-              key={key('username')}
-              {...getInputProps('username')}
-            />
-            <PasswordInput
-              my="sm"
-              withAsterisk
-              label="Пароль"
-              placeholder="Ваш пароль"
-              key={key('password')}
-              {...getInputProps('password')}
-            />
-            <Button mt="lg" type="submit" fullWidth loading={isLoading}>
-              Войти
-            </Button>
-          </form>
-        </Stack>
+        <LoginForm onSubmit={mutate} isLoading={isLoading} />
 
         {isError && (
           <Notification color="red" mt="md">
