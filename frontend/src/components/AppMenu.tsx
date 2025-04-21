@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Container, Dropdown, Image, Menu } from 'semantic-ui-react';
 
 import routes from '@/constants/routes';
+import { Group } from '@mantine/core';
+import UserMenu from './UserMenu';
 
 const AppMenu: FC = () => (
   <Menu fixed="top" inverted>
@@ -47,6 +49,9 @@ const AppMenu: FC = () => (
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
+      <Group flex={1} align="center" justify="flex-end">
+        <UserMenu />
+      </Group>
     </Container>
   </Menu>
 );

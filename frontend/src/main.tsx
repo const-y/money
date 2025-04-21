@@ -21,16 +21,18 @@ import ExpensesByCurrencyDetails from './pages/ExpensesByCurrencyDetails';
 import Home from './pages/Home';
 import IncomeExpenses from './pages/IncomeExpenses';
 import Planning from './pages/Planning';
+import Login from './pages/Login';
+import { AuthProvider } from './context/Auth';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: 'accounting', element: <Accounting /> },
-      { path: 'planning', element: <Planning /> },
-      { path: 'account-types', element: <AccountTypes /> },
+      { path: routes.HOME, element: <Home /> },
+      { path: routes.ACCOUNTING, element: <Accounting /> },
+      { path: routes.PLANNING, element: <Planning /> },
+      { path: routes.ACCOUNT_TYPES, element: <AccountTypes /> },
       { path: routes.ACCOUNTS, element: <Accounts /> },
       { path: routes.EXCHANGE_RATES, element: <ExchangeRates /> },
       { path: routes.CATEGORIES, element: <Categories /> },
@@ -48,19 +50,22 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: routes.LOGIN, element: <Login /> },
 ]);
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ModalStateProvider>
-        <MantineProvider>
-          <RouterProvider router={router} />
-        </MantineProvider>
-      </ModalStateProvider>
-    </QueryClientProvider>
-    <ToastContainer />
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <ModalStateProvider>
+          <MantineProvider>
+            <RouterProvider router={router} />
+          </MantineProvider>
+        </ModalStateProvider>
+      </QueryClientProvider>
+      <ToastContainer />
+    </AuthProvider>
   </React.StrictMode>
 );
