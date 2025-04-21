@@ -23,3 +23,7 @@ ratings:
   paths:
     - frontend/src
     - backend
+
+exclude_patterns:
+  - node_modules/
+  - '**/__tests__/'
