@@ -1,0 +1,25 @@
+version: '2'
+plugins:
+  eslint:
+    enabled: true
+    channel: eslint-8
+    config:
+      extensions:
+        - .js
+        - .jsx
+        - .ts
+        - .tsx
+      files:
+        - frontend/src
+
+  pylint:
+    enabled: true
+    channel: pylint-2
+    config:
+      files:
+        - backend
+
+ratings:
+  paths:
+    - frontend/src
+    - backend
