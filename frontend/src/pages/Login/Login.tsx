@@ -1,4 +1,4 @@
-import { Center, Notification, Paper, Stack, Title } from '@/components/ui';
+import { Center, Notification, Paper, Title } from '@/components/ui';
 import routes from '@/constants/routes';
 import { useAuthContext } from '@/context/Auth';
 import useLoginMutation from '@/hooks/useLoginMutation';
@@ -28,9 +28,7 @@ const Login: FC = () => {
         <Title order={2} ta="center" mb="md">
           Вход в систему
         </Title>
-
         <LoginForm onSubmit={mutate} isLoading={isLoading} />
-
         {isError && (
           <Notification color="red" mt="md">
             {(error as any)?.message || 'Ошибка авторизации'}

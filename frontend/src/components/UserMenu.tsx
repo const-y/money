@@ -3,32 +3,34 @@ import routes from '@/constants/routes';
 import { useAuthContext } from '@/context/Auth';
 import useLogoutMutation from '@/hooks/useLogoutMutation';
 import useMeQuery from '@/hooks/useMeQuery';
-import { Loader } from '@mantine/core';
+import { Box, Loader } from '@mantine/core';
 import { IconChevronDown, IconLogout } from '@tabler/icons-react';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UserMenu: FC = () => {
+const useUserMeu = () => {
   const { logout } = useAuthContext();
 
   const { data: user, isLoading } = useMeQuery();
   const navigate = useNavigate();
-  const avatarSrc = 'https://i.pravatar.cc/40';
+  const avatarSrc = `https://i.pravatar.cc/40?u=${user?.username}}`;
 
-  const { mutate } = useLogoutMutation({
+  const { mutate: logoutMutate } = useLogoutMutation({
     onSuccess: () => {
       logout();
       navigate(routes.LOGIN);
     },
   });
 
+  return { user, isLoading, avatarSrc, logout: logoutMutate };
+};
+
+const UserMenu: FC = () => {
+  const { user, isLoading, avatarSrc, logout } = useUserMeu();
+
   if (isLoading || !user) {
     return <Loader size="xs" />;
   }
-
-  const handleLogout = () => {
-    mutate();
-  };
 
   return (
     <Menu shadow="md" width={200}>
@@ -36,14 +38,14 @@ const UserMenu: FC = () => {
         <UnstyledButton>
           <Group gap="xs">
             <Avatar src={avatarSrc} alt={user.username} radius="xl" />
-            <div style={{ lineHeight: 1 }}>
+            <Box>
               <Text size="sm" fw={500} c="white">
                 {user.username}
               </Text>
               <Text size="xs" c="dimmed">
                 {user.email}
               </Text>
-            </div>
+            </Box>
             <IconChevronDown size={16} />
           </Group>
         </UnstyledButton>
@@ -52,7 +54,7 @@ const UserMenu: FC = () => {
       <Menu.Dropdown>
         <Menu.Item
           leftSection={<IconLogout size={16} />}
-          onClick={handleLogout}
+          onClick={() => logout()}
         >
           Выйти
         </Menu.Item>

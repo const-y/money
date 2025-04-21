@@ -16,4 +16,6 @@ export {
   Menu,
   Text,
   UnstyledButton,
+  Box,
+  Loader,
 } from '@mantine/core';
