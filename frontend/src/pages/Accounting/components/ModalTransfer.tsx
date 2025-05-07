@@ -35,6 +35,7 @@ const ModalTransfer: FC<ModalTransferProps> = ({ sourceAccountId }) => {
         sourceAccountId,
         queries.OPERATIONS,
       ]);
+      queryClient.invalidateQueries(queries.ACCOUNTS);
     },
   });
 

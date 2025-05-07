@@ -20,7 +20,7 @@ const AccountsMenu: FC = () => {
   };
 
   return (
-    <Menu fluid vertical tabular>
+    <Menu fluid vertical tabular style={{ height: '100%' }}>
       {data.map(({ id, name, balance, currency }) => {
         const isActive = activeAccountId === id;
         return (
