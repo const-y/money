@@ -24,6 +24,10 @@ ratings:
     - frontend/src
     - backend
 
-exclude_patterns:
-  - node_modules/
-  - '**/__tests__/'
+exclude_paths:
+  - frontend/src/**/__tests__/**
+  - frontend/src/**/*.test.js
+  - frontend/src/**/*.test.ts
+  - frontend/src/**/*.test.tsx
+  - backend/**/tests/**
+  - backend/**/test_*.py
