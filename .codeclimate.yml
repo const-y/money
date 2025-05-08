@@ -1,0 +1,33 @@
+version: '2'
+plugins:
+  eslint:
+    enabled: true
+    channel: eslint-8
+    config:
+      extensions:
+        - .js
+        - .jsx
+        - .ts
+        - .tsx
+      files:
+        - frontend/src
+
+  pylint:
+    enabled: true
+    channel: pylint-2
+    config:
+      files:
+        - backend
+
+ratings:
+  paths:
+    - frontend/src
+    - backend
+
+exclude_paths:
+  - frontend/src/**/__tests__/**
+  - frontend/src/**/*.test.js
+  - frontend/src/**/*.test.ts
+  - frontend/src/**/*.test.tsx
+  - backend/**/tests/**
+  - backend/**/test_*.py
