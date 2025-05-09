@@ -1,46 +1,49 @@
 import assertIsDate from '@/helpers/assertIsDate';
+import { DatePickerInput } from '@mantine/dates';
 import { FC } from 'react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { SemanticDatepickerProps } from 'react-semantic-ui-datepickers/dist/types';
+import '@mantine/dates/styles.css';
 
-interface DatepickerProps {
+interface DatePickerProps {
   value: Date | null;
   error?: string;
   label?: string;
   required?: boolean;
   onChange: (value: Date) => void;
+  hasMargins?: boolean;
 }
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const LOCALE = 'ru-RU';
 
-const Datepicker: FC<DatepickerProps> = ({
+const DatePicker: FC<DatePickerProps> = ({
   value,
   onChange,
   error,
   label,
   required,
+  hasMargins,
 }) => {
-  const handleChange = (_event: any, data: SemanticDatepickerProps) => {
-    assertIsDate(data.value);
-    onChange(data.value);
+  const handleChange = (value: Date | null) => {
+    assertIsDate(value);
+    onChange(value);
   };
 
   return (
-    <SemanticDatepicker
+    <DatePickerInput
       value={value}
       onChange={handleChange}
-      format={DATE_FORMAT}
+      valueFormat={DATE_FORMAT}
       label={label}
       required={required}
       error={error}
       locale={LOCALE}
+      my={hasMargins ? 'sm' : undefined}
     />
   );
 };
 
-Datepicker.defaultProps = {
+DatePicker.defaultProps = {
   label: 'Выберите дату',
 };
 
-export default Datepicker;
+export default DatePicker;

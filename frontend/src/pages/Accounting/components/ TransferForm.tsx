@@ -1,5 +1,5 @@
 import AccountSelectField from '@/components/AccountSelectField';
-import Datepicker from '@/components/Datepicker';
+import { DatePicker } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
@@ -57,11 +57,12 @@ const TransferForm: FC<TransferFormProps> = ({ initialValues, onSubmit }) => {
 
   return (
     <Form id={formId} onSubmit={handleSubmit}>
-      <Datepicker
+      <DatePicker
         value={values.date}
         onChange={handleDateChange}
         required
         error={getError('date')}
+        hasMargins
       />
       <Form.Input
         name="description"

@@ -1,5 +1,5 @@
 import CategorySelectField from '@/components/CategorySelectField';
-import Datepicker from '@/components/Datepicker';
+import { DatePicker } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
@@ -62,11 +62,12 @@ const OperationForm: FC<OperationFormProps> = ({ initialValues, onSubmit }) => {
 
   return (
     <Form id={formId} onSubmit={handleSubmit}>
-      <Datepicker
+      <DatePicker
         value={values.date}
         onChange={handleDateChange}
         error={getError('date')}
         required
+        hasMargins
       />
       <OperationTypeRadioGroup
         isExpense={values.isExpense}

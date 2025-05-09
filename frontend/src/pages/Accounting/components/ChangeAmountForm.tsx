@@ -1,10 +1,7 @@
+import { DatePicker, TextInput } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-import { SemanticDatepickerProps } from 'react-semantic-ui-datepickers/dist/types';
-import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 export interface ChangeAmountFormValues {
@@ -39,37 +36,33 @@ const ChangeAmountForm: FC<ChangeAmountFormProps> = ({
       onSubmit,
     });
 
-  const handleDateChange = (
-    _event: React.SyntheticEvent<Element, Event> | undefined,
-    data: SemanticDatepickerProps
-  ) => {
-    setFieldValue('date', data.value);
+  const handleDateChange = (date: Date) => {
+    setFieldValue('date', date);
   };
 
   const getError = (fieldName: keyof ChangeAmountFormValues) =>
     touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
-    <Form id={id} onSubmit={handleSubmit}>
-      <SemanticDatepicker
-        name="date"
+    <form id={id} onSubmit={handleSubmit}>
+      <DatePicker
         value={values.date}
         onChange={handleDateChange}
-        format="YYYY-MM-DD"
         label="Выберите дату"
         required
         error={getError('date')}
+        hasMargins
       />
-      <Form.Input
+      <TextInput
         name="newAmount"
         label="Новый остаток"
         placeholder="Новый остаток"
         value={values.newAmount}
         error={getError('newAmount')}
         onChange={handleChange}
-        required
+        withAsterisk
       />
-    </Form>
+    </form>
   );
 };
 
