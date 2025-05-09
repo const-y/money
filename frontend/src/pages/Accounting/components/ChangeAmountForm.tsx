@@ -1,4 +1,4 @@
-import { DatePicker, TextInput } from '@/components/ui';
+import { DatePicker, Stack, TextInput } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormik } from 'formik';
 import { FC } from 'react';
@@ -45,23 +45,24 @@ const ChangeAmountForm: FC<ChangeAmountFormProps> = ({
 
   return (
     <form id={id} onSubmit={handleSubmit}>
-      <DatePicker
-        value={values.date}
-        onChange={handleDateChange}
-        label="Выберите дату"
-        required
-        error={getError('date')}
-        hasMargins
-      />
-      <TextInput
-        name="newAmount"
-        label="Новый остаток"
-        placeholder="Новый остаток"
-        value={values.newAmount}
-        error={getError('newAmount')}
-        onChange={handleChange}
-        withAsterisk
-      />
+      <Stack gap="sm">
+        <DatePicker
+          value={values.date}
+          onChange={handleDateChange}
+          label="Выберите дату"
+          required
+          error={getError('date')}
+        />
+        <TextInput
+          name="newAmount"
+          label="Новый остаток"
+          placeholder="Новый остаток"
+          value={values.newAmount}
+          error={getError('newAmount')}
+          onChange={handleChange}
+          withAsterisk
+        />
+      </Stack>
     </form>
   );
 };

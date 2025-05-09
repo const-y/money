@@ -1,11 +1,9 @@
 import CategorySelectField from '@/components/CategorySelectField';
-import { DatePicker } from '@/components/ui';
+import { DatePicker, Stack, TextInput } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import OperationTypeRadioGroup from './OperationTypeRadioGroup';
 
@@ -61,43 +59,44 @@ const OperationForm: FC<OperationFormProps> = ({ initialValues, onSubmit }) => {
   };
 
   return (
-    <Form id={formId} onSubmit={handleSubmit}>
-      <DatePicker
-        value={values.date}
-        onChange={handleDateChange}
-        error={getError('date')}
-        required
-        hasMargins
-      />
-      <OperationTypeRadioGroup
-        isExpense={values.isExpense}
-        onChange={handleOperationTypeRadioGroupChange}
-      />
-      <Form.Input
-        name="amount"
-        label="Сумма"
-        placeholder="Сумма"
-        value={values.amount}
-        error={getError('amount')}
-        onChange={handleChange}
-        required
-      />
-      <Form.Input
-        name="description"
-        label="Описание"
-        placeholder="Описание"
-        value={values.description}
-        error={getError('description')}
-        onChange={handleChange}
-        required
-      />
-      <CategorySelectField
-        value={values.categoryId}
-        onChange={handleCategorySelectFieldChange}
-        error={getError('categoryId')}
-        operationType={values.isExpense ? 'EXPENSE' : 'INCOME'}
-      />
-    </Form>
+    <form id={formId} onSubmit={handleSubmit}>
+      <Stack gap="sm">
+        <DatePicker
+          value={values.date}
+          onChange={handleDateChange}
+          error={getError('date')}
+          required
+        />
+        <OperationTypeRadioGroup
+          isExpense={values.isExpense}
+          onChange={handleOperationTypeRadioGroupChange}
+        />
+        <TextInput
+          name="amount"
+          label="Сумма"
+          placeholder="Сумма"
+          value={values.amount}
+          error={getError('amount')}
+          onChange={handleChange}
+          required
+        />
+        <TextInput
+          name="description"
+          label="Описание"
+          placeholder="Описание"
+          value={values.description}
+          error={getError('description')}
+          onChange={handleChange}
+          required
+        />
+        <CategorySelectField
+          value={values.categoryId}
+          onChange={handleCategorySelectFieldChange}
+          error={getError('categoryId')}
+          operationType={values.isExpense ? 'EXPENSE' : 'INCOME'}
+        />
+      </Stack>
+    </form>
   );
 };
 

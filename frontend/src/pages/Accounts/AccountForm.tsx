@@ -2,6 +2,7 @@ import { getAccountTypes } from '@/api/accountTypes';
 import queries from '@/constants/queries';
 import { useFormId } from '@/context/FormId';
 import getDropdownOptions from '@/helpers/getDropdownOptions';
+import { Stack, TextInput } from '@mantine/core';
 import { useFormik } from 'formik';
 import { FC, useMemo } from 'react';
 import { useQuery } from 'react-query';
@@ -42,34 +43,36 @@ const AccountForm: FC<AccountFormProps> = ({ initialValues, onSubmit }) => {
   };
 
   return (
-    <Form id={formId} onSubmit={handleSubmit}>
-      <Form.Input
-        name="name"
-        label="Название"
-        placeholder="Название"
-        value={values.name}
-        error={getError('name')}
-        onChange={handleChange}
-      />
-      <Form.Input
-        name="currency"
-        label="Валюта"
-        placeholder="Валюта"
-        value={values.currency}
-        error={getError('currency')}
-        onChange={handleChange}
-      />
-      <Form.Select
-        label="Тип счета"
-        placeholder="Тип счета"
-        value={values.accountType}
-        error={getError('accountType')}
-        onChange={handleSelectAccountTypeChange}
-        options={accountTypeOptions}
-        loading={isLoading}
-        search
-      />
-    </Form>
+    <form id={formId} onSubmit={handleSubmit}>
+      <Stack gap="sm">
+        <TextInput
+          name="name"
+          label="Название"
+          placeholder="Название"
+          value={values.name}
+          error={getError('name')}
+          onChange={handleChange}
+        />
+        <TextInput
+          name="currency"
+          label="Валюта"
+          placeholder="Валюта"
+          value={values.currency}
+          error={getError('currency')}
+          onChange={handleChange}
+        />
+        <Form.Select
+          label="Тип счета"
+          placeholder="Тип счета"
+          value={values.accountType}
+          error={getError('accountType')}
+          onChange={handleSelectAccountTypeChange}
+          options={accountTypeOptions}
+          loading={isLoading}
+          search
+        />
+      </Stack>
+    </form>
   );
 };
 

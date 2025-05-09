@@ -9,7 +9,6 @@ interface DatePickerProps {
   label?: string;
   required?: boolean;
   onChange: (value: Date) => void;
-  hasMargins?: boolean;
 }
 
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -21,7 +20,6 @@ const DatePicker: FC<DatePickerProps> = ({
   error,
   label,
   required,
-  hasMargins,
 }) => {
   const handleChange = (value: Date | null) => {
     assertIsDate(value);
@@ -37,7 +35,6 @@ const DatePicker: FC<DatePickerProps> = ({
       required={required}
       error={error}
       locale={LOCALE}
-      my={hasMargins ? 'sm' : undefined}
     />
   );
 };

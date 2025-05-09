@@ -1,10 +1,9 @@
-import { ExchangeRate } from '@/api/exchangeRates';
+import { DatePicker, Stack, TextInput } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
+import assertIsString from '@/helpers/assertIsString';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 export interface ExchangeRateFormValues {
@@ -39,48 +38,57 @@ const ExchangeRateForm: FC<ExchangeRateFormProps> = ({
       onSubmit,
     });
 
-  const getError = (fieldName: keyof ExchangeRateFormValues) =>
-    touched[fieldName] ? errors[fieldName] : undefined;
+  const getError = (
+    fieldName: keyof ExchangeRateFormValues
+  ): string | undefined => {
+    const error = touched[fieldName] ? errors[fieldName] : undefined;
+
+    if (error) {
+      assertIsString(error);
+    }
+
+    return error;
+  };
 
   return (
-    <Form id={formId} onSubmit={handleSubmit}>
-      <SemanticDatepicker
-        name="date"
-        value={values.date}
-        onChange={(_event, data) => setFieldValue('date', data.value)}
-        format="YYYY-MM-DD"
-        label="Выберите дату"
-        required
-        error={getError('date')}
-      />
-      <Form.Input
-        name="currency"
-        label="Валюта"
-        placeholder="Валюта"
-        value={values.currency}
-        error={getError('currency')}
-        onChange={handleChange}
-        required
-      />
-      <Form.Input
-        name="baseCurrency"
-        label="Базовая валюта"
-        placeholder="Базовая валюта"
-        value={values.baseCurrency}
-        error={getError('baseCurrency')}
-        onChange={handleChange}
-        required
-      />
-      <Form.Input
-        name="rate"
-        label="Курс"
-        placeholder="Курс валюты относительно базовой"
-        value={values.rate}
-        error={getError('rate')}
-        onChange={handleChange}
-        required
-      />
-    </Form>
+    <form id={formId} onSubmit={handleSubmit}>
+      <Stack gap="sm">
+        <DatePicker
+          value={values.date}
+          onChange={(value) => setFieldValue('date', value)}
+          label="Выберите дату"
+          required
+          error={getError('date')}
+        />
+        <TextInput
+          name="currency"
+          label="Валюта"
+          placeholder="Валюта"
+          value={values.currency}
+          error={getError('currency')}
+          onChange={handleChange}
+          required
+        />
+        <TextInput
+          name="baseCurrency"
+          label="Базовая валюта"
+          placeholder="Базовая валюта"
+          value={values.baseCurrency}
+          error={getError('baseCurrency')}
+          onChange={handleChange}
+          required
+        />
+        <TextInput
+          name="rate"
+          label="Курс"
+          placeholder="Курс валюты относительно базовой"
+          value={values.rate}
+          error={getError('rate')}
+          onChange={handleChange}
+          required
+        />
+      </Stack>
+    </form>
   );
 };
 

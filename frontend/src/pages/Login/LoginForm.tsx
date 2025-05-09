@@ -1,4 +1,4 @@
-import { Button, PasswordInput, TextInput } from '@/components/ui';
+import { Button, PasswordInput, Stack, TextInput } from '@/components/ui';
 import { useForm, isNotEmpty } from '@mantine/form';
 import { FC } from 'react';
 
@@ -33,25 +33,25 @@ const LoginForm: FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
 
   return (
     <form onSubmit={handleSubmit((values) => onSubmit(values))}>
-      <TextInput
-        my="sm"
-        withAsterisk
-        label="Логин"
-        placeholder="Ваш логин"
-        key={key('username')}
-        {...getInputProps('username')}
-      />
-      <PasswordInput
-        my="sm"
-        withAsterisk
-        label="Пароль"
-        placeholder="Ваш пароль"
-        key={key('password')}
-        {...getInputProps('password')}
-      />
-      <Button mt="lg" type="submit" fullWidth loading={isLoading}>
-        Войти
-      </Button>
+      <Stack gap="sm">
+        <TextInput
+          withAsterisk
+          label="Логин"
+          placeholder="Ваш логин"
+          key={key('username')}
+          {...getInputProps('username')}
+        />
+        <PasswordInput
+          withAsterisk
+          label="Пароль"
+          placeholder="Ваш пароль"
+          key={key('password')}
+          {...getInputProps('password')}
+        />
+        <Button mt="lg" type="submit" fullWidth loading={isLoading}>
+          Войти
+        </Button>
+      </Stack>
     </form>
   );
 };
