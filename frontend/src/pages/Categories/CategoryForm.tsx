@@ -1,9 +1,8 @@
-import { Stack, TextInput } from '@/components/ui';
+import { Checkbox, Stack, TextInput } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 export interface CategoryFormValues {
@@ -43,9 +42,9 @@ const CategoryForm: FC<CategoryFormProps> = ({ initialValues, onSubmit }) => {
           value={values.name}
           error={getError('name')}
           onChange={handleChange}
-          required
+          withAsterisk
         />
-        <Form.Checkbox
+        <Checkbox
           name="isExpense"
           id="isExpense"
           label="Это расход"
