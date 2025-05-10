@@ -1,8 +1,6 @@
-import { FC, SyntheticEvent, useState } from 'react';
-import { Header } from 'semantic-ui-react';
-
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import { SemanticDatepickerProps } from 'react-semantic-ui-datepickers/dist/types';
+import { PageTitle } from '@/components/ui';
+import DateRangePicker from '@/components/ui/DateRangePicker';
+import { FC, useState } from 'react';
 import IncomeExpensesReportView from './IncomeExpensesReportView';
 
 const currentDate = new Date();
@@ -21,32 +19,24 @@ const endOfMonth = new Date(
   0
 );
 
-const initialDateRange = [startOfMonth, endOfMonth];
+const initialDateRange: [Date, Date] = [startOfMonth, endOfMonth];
 
 const IncomeExpenses: FC = () => {
   const [dateRange, setDateRange] = useState(initialDateRange);
 
-  const handleDateRangeChange = (
-    _event: SyntheticEvent<Element, Event> | undefined,
-    data: SemanticDatepickerProps
-  ) => {
-    const { value } = data;
-
-    if (Array.isArray(value)) setDateRange(value);
+  const handleDateRangeChange = (dates: [Date | null, Date | null]) => {
+    setDateRange(dates);
   };
 
   const [from, to] = dateRange;
 
   return (
     <>
-      <Header as="h1">Доходы и расходы</Header>
-      <SemanticDatepicker
-        name="date"
+      <PageTitle>Доходы и расходы</PageTitle>
+      <DateRangePicker
         value={dateRange}
         onChange={handleDateRangeChange}
-        format="YYYY-MM-DD"
         required
-        type="range"
       />
       {from && to && <IncomeExpensesReportView from={from} to={to} />}
     </>

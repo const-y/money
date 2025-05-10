@@ -1,28 +1,26 @@
-import assertIsDate from '@/helpers/assertIsDate';
-import { DatePickerInput } from '@mantine/dates';
+import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
 import '@mantine/dates/styles.css';
 import { FC } from 'react';
 
-interface DatePickerProps {
-  value: Date | null;
+interface DateRangePickerProps {
+  value: [Date | null, Date | null];
   error?: string;
   label?: string;
   required?: boolean;
-  onChange: (value: Date) => void;
+  onChange: (value: [Date | null, Date | null]) => void;
 }
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const LOCALE = 'ru-RU';
 
-const DatePicker: FC<DatePickerProps> = ({
+const DateRangePicker: FC<DateRangePickerProps> = ({
   value,
   onChange,
   error,
-  label = 'Выберите дату',
+  label = 'Выберите период',
   required,
 }) => {
-  const handleChange = (value: Date | null) => {
-    assertIsDate(value);
+  const handleChange = (value: DatesRangeValue) => {
     onChange(value);
   };
 
@@ -35,8 +33,9 @@ const DatePicker: FC<DatePickerProps> = ({
       required={required}
       error={error}
       locale={LOCALE}
+      type="range"
     />
   );
 };
 
-export default DatePicker;
+export default DateRangePicker;
