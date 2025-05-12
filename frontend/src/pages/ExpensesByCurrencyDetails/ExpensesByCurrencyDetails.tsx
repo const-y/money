@@ -2,11 +2,12 @@ import {
   GetExpensesBuCurrenciesDetailsReportArg,
   getExpensesBuCurrenciesDetailsReport,
 } from '@/api/reports';
+import { PageTitle } from '@/components/ui';
 import queries from '@/constants/queries';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
 import { Params, useParams } from 'react-router-dom';
-import { Header, Loader } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 import ExpensesByCurrencyDetailsBreadcrumb from './ExpensesByCurrencyDetailsBreadcrumb';
 import ExpensesByCurrencyDetailsChart from './ExpensesByCurrencyDetailsChart';
 
@@ -29,7 +30,7 @@ const ExpensesByCurrencyDetails: FC = () => {
   return (
     <>
       <ExpensesByCurrencyDetailsBreadcrumb header={header} />
-      <Header as="h1">{header}</Header>
+      <PageTitle>{header}</PageTitle>
       <ExpensesByCurrencyDetailsChart data={data} />
     </>
   );

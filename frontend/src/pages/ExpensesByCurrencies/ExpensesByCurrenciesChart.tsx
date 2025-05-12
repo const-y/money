@@ -4,6 +4,7 @@ import { Header } from 'semantic-ui-react';
 import ClickableBarChart from './ClickableBarChart';
 import { useNavigate } from 'react-router-dom';
 import routes from '@/constants/routes';
+import { PageTitle } from '@/components/ui';
 
 interface ExpensesByCurrenciesChartProps {
   data: ExpensesByCurrenciesReportDataItem[];
@@ -47,7 +48,7 @@ const ExpensesByCurrenciesChart: FC<ExpensesByCurrenciesChartProps> = ({
 
   return (
     <>
-      <Header as="h1">Расходы по валютам</Header>
+      <PageTitle>Расходы по валютам</PageTitle>
       {Object.keys(datasetsMap).map((currency) => {
         const handleBarChartClick = (index: number) => {
           const month = index + 1;

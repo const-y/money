@@ -1,11 +1,9 @@
 import AccountSelectField from '@/components/AccountSelectField';
-import Datepicker from '@/components/Datepicker';
+import { DatePicker, Stack, TextInput } from '@/components/ui';
 import { REQUIRED_FIELD_ERROR_MESSAGE } from '@/constants/form';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-import { Form } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 export interface TransferFormValues {
@@ -56,55 +54,57 @@ const TransferForm: FC<TransferFormProps> = ({ initialValues, onSubmit }) => {
     touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
-    <Form id={formId} onSubmit={handleSubmit}>
-      <Datepicker
-        value={values.date}
-        onChange={handleDateChange}
-        required
-        error={getError('date')}
-      />
-      <Form.Input
-        name="description"
-        label="Описание"
-        placeholder="Описание"
-        value={values.description}
-        error={getError('description')}
-        onChange={handleChange}
-        required
-      />
-      <AccountSelectField
-        value={values.sourceAccountId}
-        onChange={createAccountSelectChangeHandler('sourceAccountId')}
-        label="Источник"
-        placeholder="Выберите счет с которого взять деньги"
-        error={getError('sourceAccountId')}
-      />
-      <Form.Input
-        name="sourceAmount"
-        label="Сума снятия"
-        placeholder="Сумма снятия в валюте источника"
-        value={values.sourceAmount}
-        error={getError('sourceAmount')}
-        onChange={handleChange}
-        required
-      />
-      <AccountSelectField
-        value={values.targetAccountId}
-        onChange={createAccountSelectChangeHandler('targetAccountId')}
-        label="Назначение"
-        placeholder="Выберите счет куда положить деньги"
-        error={getError('targetAccountId')}
-      />
-      <Form.Input
-        name="targetAmount"
-        label="Сумма зачисления"
-        placeholder="Сумма зачисления в валюте источника"
-        value={values.targetAmount}
-        error={getError('targetAmount')}
-        onChange={handleChange}
-        required
-      />
-    </Form>
+    <form id={formId} onSubmit={handleSubmit}>
+      <Stack gap="sm">
+        <DatePicker
+          value={values.date}
+          onChange={handleDateChange}
+          required
+          error={getError('date')}
+        />
+        <TextInput
+          name="description"
+          label="Описание"
+          placeholder="Описание"
+          value={values.description}
+          error={getError('description')}
+          onChange={handleChange}
+          required
+        />
+        <AccountSelectField
+          value={values.sourceAccountId}
+          onChange={createAccountSelectChangeHandler('sourceAccountId')}
+          label="Источник"
+          placeholder="Выберите счет с которого взять деньги"
+          error={getError('sourceAccountId')}
+        />
+        <TextInput
+          name="sourceAmount"
+          label="Сума снятия"
+          placeholder="Сумма снятия в валюте источника"
+          value={values.sourceAmount}
+          error={getError('sourceAmount')}
+          onChange={handleChange}
+          required
+        />
+        <AccountSelectField
+          value={values.targetAccountId}
+          onChange={createAccountSelectChangeHandler('targetAccountId')}
+          label="Назначение"
+          placeholder="Выберите счет куда положить деньги"
+          error={getError('targetAccountId')}
+        />
+        <TextInput
+          name="targetAmount"
+          label="Сумма зачисления"
+          placeholder="Сумма зачисления в валюте источника"
+          value={values.targetAmount}
+          error={getError('targetAmount')}
+          onChange={handleChange}
+          required
+        />
+      </Stack>
+    </form>
   );
 };
 

@@ -1,7 +1,7 @@
+import { Stack, TextInput } from '@/components/ui';
 import { useFormId } from '@/context/FormId';
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import { Form } from 'semantic-ui-react';
 
 export interface AccountTypeFormValues {
   title: string;
@@ -30,16 +30,18 @@ const AccountTypeForm: FC<AccountTypeFormProps> = ({
     touched[fieldName] ? errors[fieldName] : undefined;
 
   return (
-    <Form id={formId} onSubmit={handleSubmit}>
-      <Form.Input
-        name="title"
-        label="Название"
-        placeholder="Название"
-        value={values.title}
-        error={getError('title')}
-        onChange={handleChange}
-      />
-    </Form>
+    <form id={formId} onSubmit={handleSubmit}>
+      <Stack gap="sm">
+        <TextInput
+          name="title"
+          label="Название"
+          placeholder="Название"
+          value={values.title}
+          error={getError('title')}
+          onChange={handleChange}
+        />
+      </Stack>
+    </form>
   );
 };
 

@@ -1,8 +1,8 @@
-import assertIsNumber from '@/helpers/assertIsNumber';
+import { Select, SelectOption } from '@/components/ui';
+import assertIsString from '@/helpers/assertIsString';
 import getDropdownOptions from '@/helpers/getDropdownOptions';
 import useAccountsQuery from '@/hooks/useAccountsQuery';
 import { FC, useMemo } from 'react';
-import { DropdownItemProps, DropdownProps, Form } from 'semantic-ui-react';
 
 interface AccountSelectFieldProps {
   value: number | null;
@@ -19,29 +19,28 @@ const AccountSelectField: FC<AccountSelectFieldProps> = ({
   placeholder,
   onChange,
 }) => {
-  const { data, isLoading } = useAccountsQuery();
+  const { data } = useAccountsQuery();
 
-  const options: DropdownItemProps[] = useMemo(
+  const options: SelectOption[] = useMemo(
     () => getDropdownOptions(data, (account) => account.name),
     [data]
   );
 
-  const handleChange = (_event: any, { value }: DropdownProps) => {
-    assertIsNumber(value);
-    onChange(value);
+  const handleChange = (selectValue: string | null) => {
+    assertIsString(selectValue);
+    onChange(Number(selectValue));
   };
 
   return (
-    <Form.Select
-      options={options}
+    <Select
+      data={options}
       label={label}
       placeholder={placeholder}
-      value={value || 0}
+      value={String(value)}
       error={error}
       onChange={handleChange}
-      required
-      loading={isLoading}
-      search
+      searchable
+      withAsterisk
     />
   );
 };
