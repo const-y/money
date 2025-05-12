@@ -20,4 +20,10 @@ export {
   Box,
   Loader,
   Checkbox,
+  Select,
 } from '@mantine/core';
+
+export interface SelectOption {
+  label: string;
+  value: string;
+}

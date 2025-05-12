@@ -1,16 +1,15 @@
 import { createAccount } from '@/api/accounts';
 import FormModal from '@/components/FormModal';
+import { Button } from '@/components/ui';
 import { MODAL_ADD_ACCOUNT } from '@/constants/modalIds';
 import queries from '@/constants/queries';
 import { useModalState } from '@/context/ModalState';
-import assertIsNumber from '@/helpers/assertIsNumber';
+import { CreateAccount } from '@/models/CreateAccount';
 import { FC } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Icon } from 'semantic-ui-react';
 import AccountForm, { AccountFormValues } from './AccountForm';
-import { CreateAccount } from '@/models/CreateAccount';
-import { Button } from '@/components/ui';
 
 const INITIAL_VALUES: AccountFormValues = {
   name: '',
@@ -58,11 +57,9 @@ const ModalAddForm: FC = () => {
 };
 
 function getCreateAccountData(formValues: AccountFormValues): CreateAccount {
-  assertIsNumber(formValues.accountType);
-
   return {
     ...formValues,
-    accountType: formValues.accountType,
+    accountType: Number(formValues.accountType),
   };
 }
 
